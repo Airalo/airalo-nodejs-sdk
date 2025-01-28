@@ -1,0 +1,22 @@
+{
+  "name": "airalo-nodejs-sdk",
+  "version": "1.0.0",
+  "description": "Airalo's Partner API NodeJS SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Airalo/airalo-nodejs-sdk.git"
+  },
+  "keywords": [
+    "Airalo"
+  ],
+  "author": "Airalo PX Gamma Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Airalo/airalo-nodejs-sdk/issues"
+  },
+  "homepage": "https://github.com/Airalo/airalo-nodejs-sdk#readme"
+}
