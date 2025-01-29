@@ -88,8 +88,6 @@ class AiraloStatic {
     });
   }
 
-  // ... other methods following the same pattern ...
-
   static async initResources(config) {
     this.config = this.pool['config'] ?? new Config(config);
     this.httpClient = this.pool['httpClient'] ?? new HttpClient(this.config);
@@ -101,7 +99,6 @@ class AiraloStatic {
     const token = await this.oauth.getAccessToken();
 
     this.packages = this.pool['packages'] ?? new PackagesService(this.config, this.httpClient, token);
-    // Initialize other services...
   }
 
   static checkInitialized() {
@@ -111,7 +108,6 @@ class AiraloStatic {
   }
 
   static mock() {
-    // Implement mock functionality
     return new AiraloMock();
   }
 }
