@@ -67,7 +67,106 @@ declare module 'airalo-sdk' {
         simPackageHistory(params: { iccid: string }): Promise<SimPackageHistoryResponse | null>;
     }
 
-    // ... other existing type definitions ...
+    export interface OrderPayload {
+        package_id: string;
+        quantity: number;
+        type: string;
+        description?: string;
+        webhook_url?: string;
+    }
+
+    export interface EsimCloudShare {
+        to_email: string;
+        sharing_option: ('link' | 'pdf')[];
+        copy_address?: string[];
+    }
+
+    export interface OrderResponse {
+        data: {
+            id: number;
+            code: string;
+            currency: string;
+            package_id: string;
+            quantity: number;
+            type: string;
+            description: string;
+            esim_type: string;
+            validity: number;
+            package: string;
+            data: string;
+            price: number;
+            created_at: string;
+            manual_installation: string;
+            qrcode_installation: string;
+            installation_guides: Record<string, string>;
+            text: string | null;
+            voice: string | null;
+            net_price: number;
+            sims: Array<{
+                id: number;
+                created_at: string;
+                iccid: string;
+                lpa: string;
+                imsis: any;
+                matching_id: string;
+                qrcode: string;
+                qrcode_url: string;
+                airalo_code: string | null;
+                apn_type: string;
+                apn_value: string | null;
+                is_roaming: boolean;
+                confirmation_code: string | null;
+                apn: {
+                    ios: {
+                        apn_type: string;
+                        apn_value: string | null;
+                    };
+                    android: {
+                        apn_type: string;
+                        apn_value: string | null;
+                    };
+                };
+                msisdn: string | null;
+            }>;
+        };
+        meta: {
+            message: string;
+        };
+    }
+
+    export interface AsyncOrderResponse {
+        data: {
+            request_id: string;
+            accepted_at: string;
+        };
+        meta: {
+            message: string;
+        };
+    }
+
+    export class OrderService {
+        constructor(
+            config: AiraloConfig,
+            httpClient: HttpClient,
+            signature: Signature,
+            accessToken: string
+        );
+
+        createOrder(payload: OrderPayload): Promise<OrderResponse>;
+        createOrderWithEmailSimShare(payload: OrderPayload, esimCloud: EsimCloudShare): Promise<OrderResponse>;
+        createOrderAsync(payload: OrderPayload): Promise<AsyncOrderResponse>;
+        createOrderBulk(params: Record<string, number>, description?: string): Promise<Record<string, OrderResponse>>;
+        createOrderBulkWithEmailSimShare(
+            params: Record<string, number>,
+            esimCloud: EsimCloudShare,
+            description?: string
+        ): Promise<Record<string, OrderResponse>>;
+        createOrderAsyncBulk(
+            params: Record<string, number>,
+            webhookUrl?: string,
+            description?: string
+        ): Promise<Record<string, AsyncOrderResponse>>;
+    }
 
     export default class Airalo {
         constructor(config: AiraloConfig);
