@@ -62,7 +62,7 @@ const allPackages = await AiraloStatic.getAllPackages(true);
 <h3> Get All Packages </h3>
 
 ```javascript
-async function getAllPackages(flat = false, limit = null, page = null)
+async getAllPackages(flat = false, limit = null, page = null)
 ```
 Fetching all of Airalo's packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object, example:
 ```json
@@ -188,7 +188,7 @@ By default it will paginate all pages (multiple calls) or if `page` is provided 
 Fetching local Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object.<br>
 
 ```javascript
-async function getLocalPackages(flat = false, limit = null, page = null)
+async getLocalPackages(flat = false, limit = null, page = null)
 ```
 By default no limit number of packages will be applied if `limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.<br>
@@ -197,7 +197,7 @@ By default it will paginate all pages (multiple calls) or if `page` is provided 
 Fetching global Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object.<br>
 
 ```javascript
-async function getGlobalPackages(flat = false, limit = null, page = null)
+async getGlobalPackages(flat = false, limit = null, page = null)
 ```
 By default, no limit number of packages will be applied if `limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.<br>
@@ -206,7 +206,7 @@ By default it will paginate all pages (multiple calls) or if `page` is provided 
 Fetching country specific Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object.<br>
 
 ```javascript
-async function getCountryPackages(countryCode, flat = false, limit = null)
+async getCountryPackages(countryCode, flat = false, limit = null)
 ```
 By default, no limit number of packages will be applied if `limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.<br>
@@ -215,7 +215,7 @@ By default it will paginate all pages (multiple calls) or if `page` is provided 
 Fetching Sim only Airalo packages without top-ups. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object.<br>
 
 ```javascript
-async function getSimPackages(countryCode, flat = false, limit = null)
+async getSimPackages(countryCode, flat = false, limit = null)
 ```
 By default, no limit number of packages will be applied if `limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.<br>
@@ -225,7 +225,7 @@ By default it will paginate all pages (multiple calls) or if `page` is provided 
 <h3> Single Order </h3>
 
 ```javascript
-async function order(packageId, quantity, description = null)
+async order(packageId, quantity, description = null)
 ```
 Places an order for a given package id (fetched from any of the packages calls) and calls `order` endpoint of the REST API.
 Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
@@ -259,7 +259,7 @@ const staticOrder = await AiraloStatic.order(packageId, 1);
 <h3> Async Order </h3>
 
 ```javascript
-async function orderAsync(packageId, quantity, webhookUrl = null, description = null)
+async orderAsync(packageId, quantity, webhookUrl = null, description = null)
 ```
 
 Places an async order for a given package id (fetched from any of the packages calls) and calls `order-async` endpoint of the REST API.
@@ -283,7 +283,7 @@ const staticAsyncOrder = await AiraloStatic.orderAsync(
 <h3> Order with Email eSIM Share </h3>
 
 ```javascript
-async function orderWithEmailSimShare(packageId, quantity, esimCloud, description = null)
+async orderWithEmailSimShare(packageId, quantity, esimCloud, description = null)
 ```
 
 Places an order for a given package id (fetched from any of the packages calls) and calls `order` endpoint of the REST API.<br>
@@ -317,7 +317,7 @@ const staticOrder = await AiraloStatic.orderWithEmailSimShare(
 <h3> Bulk Order </h3>
 
 ```javascript
-async function orderBulk(packages, description = null)
+async orderBulk(packages, description = null)
 ```
 Parameters: array `packages` where the key is the package name and the value represents the desired quantity.
 Parallel ordering for multiple packages (up to 50 different package ids) within the same function call.<br>
@@ -338,7 +338,7 @@ const staticBulkOrders = await AiraloStatic.orderBulk({
 <h3> Async Bulk Order </h3>
 
 ```javascript
-async function orderAsyncBulk(packages, webhookUrl = null, description = null)
+async orderAsyncBulk(packages, webhookUrl = null, description = null)
 ```
 Parameters: array `packages` where the key is the package name and the value represents the desired quantity.
 Parallel async ordering for multiple packages (up to 50 different package ids) within the same function call<br>
