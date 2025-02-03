@@ -1,7 +1,9 @@
 const Config = require('./core/Config');
 const HttpClient = require('./core/HttpClient');
+const MultiHttpClient = require('./core/MultiHttpClient');
 const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
+const OrderService = require('./services/OrderService');
 const Signature = require('./helpers/Signature');
 
 class Airalo {
@@ -12,6 +14,7 @@ class Airalo {
   initResources(config) {
     this.config = new Config(config);
     this.httpClient = new HttpClient(this.config);
+    this.multiHttpClient = new MultiHttpClient(this.config);
     this.signature = new Signature(this.config.getCredentials().client_secret);
     this.oauth = new OAuthService(this.config, this.httpClient, this.signature);
     this.services = {};
@@ -27,10 +30,18 @@ class Airalo {
         this.token
     );
 
+    this.services.order = new OrderService(
+        this.config,
+        this.httpClient,
+        this.multiHttpClient,
+        this.signature,
+        this.token
+    );
+
     return this;
   }
 
-  // Package methods that use the initialized services
+  // Package methods
   async getAllPackages(flat = false, limit = null, page = null) {
     return this.services.packages.getPackages({
       flat,
@@ -72,6 +83,59 @@ class Airalo {
       limit,
       country: countryCode.toUpperCase()
     });
+  }
+
+  // Order convenience methods
+  async order(packageId, quantity, description = null) {
+    return this.services.order.createOrder({
+      package_id: packageId,
+      quantity,
+      type: 'sim',
+      description: description ?? 'Order placed via Airalo Node.js SDK'
+    });
+  }
+
+  async orderWithEmailSimShare(packageId, quantity, esimCloud, description = null) {
+    return this.services.order.createOrderWithEmailSimShare(
+        {
+          package_id: packageId,
+          quantity,
+          type: 'sim',
+          description: description ?? 'Order placed via Airalo Node.js SDK'
+        },
+        esimCloud
+    );
+  }
+
+  async orderAsync(packageId, quantity, webhookUrl = null, description = null) {
+    return this.services.order.createOrderAsync({
+      package_id: packageId,
+      quantity,
+      type: 'sim',
+      description: description ?? 'Order placed via Airalo Node.js SDK',
+      webhook_url: webhookUrl
+    });
+  }
+
+  async orderBulk(packages, description = null) {
+    if (!packages || Object.keys(packages).length === 0) {
+      return null;
+    }
+    return this.services.order.createOrderBulk(packages, description);
+  }
+
+  async orderBulkWithEmailSimShare(packages, esimCloud, description = null) {
+    if (!packages || Object.keys(packages).length === 0) {
+      return null;
+    }
+    return this.services.order.createOrderBulkWithEmailSimShare(packages, esimCloud, description);
+  }
+
+  async orderAsyncBulk(packages, webhookUrl = null, description = null) {
+    if (!packages || Object.keys(packages).length === 0) {
+      return null;
+    }
+    return this.services.order.createOrderAsyncBulk(packages, webhookUrl, description);
   }
 }
 
