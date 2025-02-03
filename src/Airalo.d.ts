@@ -48,6 +48,35 @@ declare module 'airalo-sdk' {
         };
     }
 
+    export interface OrderResponse {
+        id: number;
+        code: string;
+        package_id: string;
+        currency: string;
+        quantity: number;
+        type: string;
+        description: string;
+        esim_type: string;
+        validity: number;
+        package: string | null;
+        data: string;
+        price: number;
+        text: string | null,
+        voice: string | null,
+        net_price: number | null
+        created_at: string;
+        manual_installation: string;
+        qrcode_installation: string;
+        installation_guides: string;
+    }
+
+    export interface CreateTopupResponse {
+        data: OrderResponse;
+        meta?: {
+            message: string;
+        };
+    }
+
     export class HttpClient {
         constructor(config: AiraloConfig);
         setHeaders(headers: string[]): this;
@@ -106,6 +135,15 @@ declare module 'airalo-sdk' {
         }): Promise<PackageResponse | null>;
     }
 
+    export class TopupService {
+        constructor(config: AiraloConfig, httpClient: HttpClient, signature: Signature, accessToken: string);
+        createTopup(params: {
+            packageId: string;
+            iccid: string;
+            description?: string | null;
+        }): Promise<CreateTopupResponse>;
+    }
+
     export class OAuthService {
         constructor(config: AiraloConfig, httpClient: HttpClient, signature: Signature);
         getAccessToken(): Promise<string>;
@@ -120,5 +158,6 @@ declare module 'airalo-sdk' {
         getLocalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getGlobalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getCountryPackages(countryCode: string, flat?: boolean, limit?: number | null): Promise<PackageResponse | null>;
+        topup(packageId: string, iccid: string, description?: string): Promise <CreateTopupResponse | null>;
     }
 }
