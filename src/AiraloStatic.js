@@ -1,6 +1,5 @@
 const Config = require('./core/Config');
 const HttpClient = require('./core/HttpClient');
-const MultiHttpClient = require('./core/MultiHttpClient');
 const Signature = require('./helpers/Signature');
 const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
@@ -11,7 +10,6 @@ class AiraloStatic {
   static pool = {};
   static config;
   static httpClient;
-  static multiHttpClient;
   static signature;
   static oauth;
   static packages;
@@ -154,7 +152,6 @@ class AiraloStatic {
   static async initResources(config) {
     this.config = this.pool['config'] ?? new Config(config);
     this.httpClient = this.pool['httpClient'] ?? new HttpClient(this.config);
-    this.multiHttpClient = this.pool['multiHttpClient'] ?? new MultiHttpClient(this.config);
     this.signature = this.pool['signature'] ?? new Signature(this.config.get('client_secret'));
   }
 
@@ -163,7 +160,7 @@ class AiraloStatic {
     const token = await this.oauth.getAccessToken();
 
     this.packages = this.pool['packages'] ?? new PackagesService(this.config, this.httpClient, token);
-    this.order = this.pool['order'] ?? new OrderService(this.config, this.httpClient, this.multiHttpClient, this.signature, token);
+    this.order = this.pool['order'] ?? new OrderService(this.config, this.httpClient, this.signature, token);
   }
 
   static checkInitialized() {

@@ -3,14 +3,13 @@ const API_CONSTANTS = require('../constants/ApiConstants');
 const SDK_CONSTANTS = require('../constants/SdkConstants');
 
 class OrderService {
-    constructor(config, httpClient, multiHttpClient, signature, accessToken) {
+    constructor(config, httpClient, signature, accessToken) {
         if (!accessToken) {
             throw new AiraloException('Invalid access token please check your credentials');
         }
 
         this.config = config;
         this.httpClient = httpClient;
-        this.multiHttpClient = multiHttpClient;
         this.signature = signature;
         this.accessToken = accessToken;
     }
@@ -74,10 +73,10 @@ class OrderService {
         return response;
     }
 
-    async createOrderBulk(params, description = null) {
-        this.validateBulkOrder(params);
+    async createOrderBulk(packages, description = null) {
+        this.validateBulkOrder(packages);
 
-        for (const [packageId, quantity] of Object.entries(params)) {
+        const orderPromises = Object.entries(packages).map(([packageId, quantity]) => {
             const payload = {
                 package_id: packageId,
                 quantity,
@@ -87,25 +86,27 @@ class OrderService {
 
             this.validateOrder(payload);
 
-            await this.multiHttpClient
-                .tag(packageId)
+            return this.httpClient
                 .setHeaders(this.getHeaders(payload))
-                .post(`${this.config.getUrl()}${API_CONSTANTS.ENDPOINTS.ORDERS_SLUG}`, payload);
-        }
+                .post(`${this.config.getUrl()}${API_CONSTANTS.ENDPOINTS.ORDERS_SLUG}`, payload)
+                .then(response => ({ [packageId]: response }))
+                .catch(error => ({
+                    [packageId]: {
+                        data: { error: error.message },
+                        meta: { message: 'error' }
+                    }
+                }));
+        });
 
-        const response = await this.multiHttpClient.exec();
-        if (!response) {
-            return null;
-        }
-
-        return response;
+        const responses = await Promise.all(orderPromises);
+        return responses.reduce((acc, curr) => ({ ...acc, ...curr }), {});
     }
 
-    async createOrderBulkWithEmailSimShare(params, esimCloud, description = null) {
-        this.validateBulkOrder(params);
+    async createOrderBulkWithEmailSimShare(packages, esimCloud, description = null) {
+        this.validateBulkOrder(packages);
         this.validateCloudSimShare(esimCloud);
 
-        for (const [packageId, quantity] of Object.entries(params)) {
+        const orderPromises = Object.entries(packages).map(([packageId, quantity]) => {
             const payload = {
                 package_id: packageId,
                 quantity,
@@ -121,46 +122,50 @@ class OrderService {
 
             this.validateOrder(payload);
 
-            await this.multiHttpClient
-                .tag(packageId)
+            return this.httpClient
                 .setHeaders(this.getHeaders(payload))
-                .post(`${this.config.getUrl()}${API_CONSTANTS.ENDPOINTS.ORDERS_SLUG}`, payload);
-        }
+                .post(`${this.config.getUrl()}${API_CONSTANTS.ENDPOINTS.ORDERS_SLUG}`, payload)
+                .then(response => ({ [packageId]: response }))
+                .catch(error => ({
+                    [packageId]: {
+                        data: { error: error.message },
+                        meta: { message: 'error' }
+                    }
+                }));
+        });
 
-        const response = await this.multiHttpClient.exec();
-        if (!response) {
-            return null;
-        }
-
-        return response;
+        const responses = await Promise.all(orderPromises);
+        return responses.reduce((acc, curr) => ({ ...acc, ...curr }), {});
     }
 
-    async createOrderAsyncBulk(params, webhookUrl = null, description = null) {
-        this.validateBulkOrder(params);
+    async createOrderAsyncBulk(packages, webhookUrl = null, description = null) {
+        this.validateBulkOrder(packages);
 
-        for (const [packageId, quantity] of Object.entries(params)) {
+        const orderPromises = Object.entries(packages).map(([packageId, quantity]) => {
             const payload = {
                 package_id: packageId,
                 quantity,
                 type: 'sim',
                 description: description ?? 'Bulk order placed via Airalo Node.js SDK',
-                webhook_url: webhookUrl,
+                webhook_url: webhookUrl
             };
 
             this.validateOrder(payload);
 
-            await this.multiHttpClient
-                .tag(packageId)
+            return this.httpClient
                 .setHeaders(this.getHeaders(payload))
-                .post(`${this.config.getUrl()}${API_CONSTANTS.ENDPOINTS.ASYNC_ORDERS_SLUG}`, payload);
-        }
+                .post(`${this.config.getUrl()}${API_CONSTANTS.ENDPOINTS.ASYNC_ORDERS_SLUG}`, payload)
+                .then(response => ({ [packageId]: response }))
+                .catch(error => ({
+                    [packageId]: {
+                        data: { error: error.message },
+                        meta: { message: 'error' }
+                    }
+                }));
+        });
 
-        const response = await this.multiHttpClient.exec();
-        if (!response) {
-            return null;
-        }
-
-        return response;
+        const responses = await Promise.all(orderPromises);
+        return responses.reduce((acc, curr) => ({ ...acc, ...curr }), {});
     }
 
     getHeaders(payload) {

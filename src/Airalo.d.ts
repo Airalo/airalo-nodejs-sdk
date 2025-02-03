@@ -188,22 +188,10 @@ declare module 'airalo-sdk' {
         };
     }
 
-    export class MultiHttpClient {
-        constructor(config: AiraloConfig);
-        tag(name: string): this;
-        setHeaders(headers: string[]): this;
-        get(url: string, params?: Record<string, any>): this;
-        post(url: string, params?: Record<string, any>): this;
-        ignoreSSL(): this;
-        setTimeout(timeout?: number): this;
-        exec(): Promise<Record<string, any>>;
-    }
-
     export class OrderService {
         constructor(
             config: AiraloConfig,
             httpClient: HttpClient,
-            multiHttpClient: MultiHttpClient,
             signature: Signature,
             accessToken: string
         );

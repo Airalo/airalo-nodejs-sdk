@@ -1,6 +1,5 @@
 const Config = require('./core/Config');
 const HttpClient = require('./core/HttpClient');
-const MultiHttpClient = require('./core/MultiHttpClient');
 const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
 const OrderService = require('./services/OrderService');
@@ -14,7 +13,6 @@ class Airalo {
   initResources(config) {
     this.config = new Config(config);
     this.httpClient = new HttpClient(this.config);
-    this.multiHttpClient = new MultiHttpClient(this.config);
     this.signature = new Signature(this.config.getCredentials().client_secret);
     this.oauth = new OAuthService(this.config, this.httpClient, this.signature);
     this.services = {};
@@ -33,7 +31,6 @@ class Airalo {
     this.services.order = new OrderService(
         this.config,
         this.httpClient,
-        this.multiHttpClient,
         this.signature,
         this.token
     );
