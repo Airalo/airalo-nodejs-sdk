@@ -59,57 +59,15 @@ declare module 'airalo-sdk' {
         head(url: string, params?: Record<string, any>): Promise<any>;
     }
 
-    export class Signature {
-        constructor(secret: string);
-        getSignature(payload: any): string | null;
-        checkSignature(hash: string | null, payload: any): boolean;
-        private preparePayload(payload: any): string | null;
-        private signData(
-            payload: string,
-            algo?: 'sha512' | string
-        ): string;
-    }
-
-    export class Crypt {
-        static encrypt(data: string, key: string): string;
-        static decrypt(data: string, key: string): string;
-        static isEncrypted(data: any): boolean;
-        static md5(str: string): string;
-    }
-
-    export class Cached {
-        static readonly CACHE_KEY: string;
-        static readonly TTL: number;
-        static readonly cachePath: string;
-
-        static get<T>(
-            work: (() => Promise<T>) | (() => T) | T,
-            cacheName: string,
-            ttl?: number
-        ): Promise<T>;
-
-        static clearCache(): Promise<void>;
-
-        private static init(): Promise<void>;
-        private static getID(key: string): string;
-    }
-
-    export class PackagesService {
+    export class SimService {
         constructor(config: AiraloConfig, httpClient: HttpClient, accessToken: string);
-        getPackages(params?: {
-            flat?: boolean;
-            limit?: number | null;
-            page?: number | null;
-            simOnly?: boolean;
-            type?: 'local' | 'global';
-            country?: string;
-        }): Promise<PackageResponse | null>;
+        simUsage(params: { iccid: string }): Promise<SimUsageResponse | null>;
+        simUsageBulk(iccids: string[]): Promise<Record<string, SimUsageResponse> | null>;
+        simTopups(params: { iccid: string }): Promise<SimTopupResponse | null>;
+        simPackageHistory(params: { iccid: string }): Promise<SimPackageHistoryResponse | null>;
     }
 
-    export class OAuthService {
-        constructor(config: AiraloConfig, httpClient: HttpClient, signature: Signature);
-        getAccessToken(): Promise<string>;
-    }
+    // ... other existing type definitions ...
 
     export default class Airalo {
         constructor(config: AiraloConfig);
@@ -120,5 +78,21 @@ declare module 'airalo-sdk' {
         getLocalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getGlobalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getCountryPackages(countryCode: string, flat?: boolean, limit?: number | null): Promise<PackageResponse | null>;
+
+        // New SIM-related methods
+        getSimUsage(iccid: string): Promise<SimUsageResponse | null>;
+        getSimUsageBulk(iccids: string[]): Promise<Record<string, SimUsageResponse> | null>;
+        getSimTopups(iccid: string): Promise<SimTopupResponse | null>;
+        getSimPackageHistory(iccid: string): Promise<SimPackageHistoryResponse | null>;
+    }
+
+    export class AiraloStatic {
+        static init(config: AiraloConfig): Promise<void>;
+        
+        // New static SIM-related methods
+        static getSimUsage(iccid: string): Promise<SimUsageResponse | null>;
+        static getSimUsageBulk(iccids: string[]): Promise<Record<string, SimUsageResponse> | null>;
+        static getSimTopups(iccid: string): Promise<SimTopupResponse | null>;
+        static getSimPackageHistory(iccid: string): Promise<SimPackageHistoryResponse | null>;
     }
 }

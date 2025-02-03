@@ -4,6 +4,7 @@ const Signature = require('./helpers/Signature');
 const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
 const AiraloException = require('./exceptions/AiraloException');
+const SimService = require('./services/SimService');
 
 class AiraloStatic {
   static pool = {};
@@ -88,6 +89,26 @@ class AiraloStatic {
     });
   }
 
+  static async getSimUsage(iccid) {
+    this.checkInitialized();
+    return this.sim.simUsage({ iccid });
+  }
+
+  static async getSimUsageBulk(iccids) {
+    this.checkInitialized();
+    return this.sim.simUsageBulk(iccids);
+  }
+
+  static async getSimTopups(iccid) {
+    this.checkInitialized();
+    return this.sim.simTopups({ iccid });
+  }
+
+  static async getSimPackageHistory(iccid) {
+    this.checkInitialized();
+    return this.sim.simPackageHistory({ iccid });
+  }
+
   static async initResources(config) {
     this.config = this.pool['config'] ?? new Config(config);
     this.httpClient = this.pool['httpClient'] ?? new HttpClient(this.config);
@@ -99,6 +120,7 @@ class AiraloStatic {
     const token = await this.oauth.getAccessToken();
 
     this.packages = this.pool['packages'] ?? new PackagesService(this.config, this.httpClient, token);
+    this.sim = this.pool['sims'] ?? new SimService(this.config, this.httpClient, token);
   }
 
   static checkInitialized() {

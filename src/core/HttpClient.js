@@ -60,6 +60,11 @@ class HttpClient {
                 let data = '';
 
                 this.code = res.statusCode;
+
+                if (this.code > 204) {
+                    reject(new AiraloException(`Request failed with status code: ${this.code}`));
+                }
+
                 this.header = res.rawHeaders.join('\r\n');
 
                 res.on('data', chunk => data += chunk);

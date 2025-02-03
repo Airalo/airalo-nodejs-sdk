@@ -3,6 +3,7 @@ const HttpClient = require('./core/HttpClient');
 const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
 const Signature = require('./helpers/Signature');
+const SimService = require('./services/SimService');
 
 class Airalo {
   constructor(config) {
@@ -22,6 +23,12 @@ class Airalo {
 
     // Initialize services
     this.services.packages = new PackagesService(
+        this.config,
+        this.httpClient,
+        this.token
+    );
+
+    this.services.sims = new SimService(
         this.config,
         this.httpClient,
         this.token
@@ -72,6 +79,22 @@ class Airalo {
       limit,
       country: countryCode.toUpperCase()
     });
+  }
+
+  async getSimUsage(iccid) {
+    return this.services.sims.simUsage({ iccid });
+  }
+
+  async getSimUsageBulk(iccids) {
+    return this.services.sims.simUsageBulk(iccids);
+  }
+
+  async getSimTopups(iccid) {
+    return this.services.sims.simTopups({ iccid });
+  }
+
+  async getSimPackageHistory(iccid) {
+    return this.services.sims.simPackageHistory({ iccid });
   }
 }
 
