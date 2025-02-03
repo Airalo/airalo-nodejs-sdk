@@ -5,6 +5,7 @@ const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
 const OrderService = require('./services/OrderService');
 const AiraloException = require('./exceptions/AiraloException');
+const SimService = require('./services/SimService');
 
 class AiraloStatic {
   static pool = {};
@@ -149,6 +150,26 @@ class AiraloStatic {
     return this.order.createOrderAsyncBulk(packages, webhookUrl, description);
   }
 
+  static async getSimUsage(iccid) {
+    this.checkInitialized();
+    return this.sim.simUsage({ iccid });
+  }
+
+  static async getSimUsageBulk(iccids) {
+    this.checkInitialized();
+    return this.sim.simUsageBulk(iccids);
+  }
+
+  static async getSimTopups(iccid) {
+    this.checkInitialized();
+    return this.sim.simTopups({ iccid });
+  }
+
+  static async getSimPackageHistory(iccid) {
+    this.checkInitialized();
+    return this.sim.simPackageHistory({ iccid });
+  }
+
   static async initResources(config) {
     this.config = this.pool['config'] ?? new Config(config);
     this.httpClient = this.pool['httpClient'] ?? new HttpClient(this.config);
@@ -161,6 +182,7 @@ class AiraloStatic {
 
     this.packages = this.pool['packages'] ?? new PackagesService(this.config, this.httpClient, token);
     this.order = this.pool['order'] ?? new OrderService(this.config, this.httpClient, this.signature, token);
+    this.sim = this.pool['sims'] ?? new SimService(this.config, this.httpClient, token);
   }
 
   static checkInitialized() {

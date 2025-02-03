@@ -8,6 +8,10 @@ const API_CONSTANTS = {
         PACKAGES: 'packages',
         ORDERS_SLUG: 'orders',
         ASYNC_ORDERS_SLUG: 'orders-async',
+        SIMS: 'sims',
+        SIMS_USAGE: 'usage',
+        SIMS_TOPUPS: 'topups',
+        SIMS_PACKAGES: 'packages'
     }
 };
 

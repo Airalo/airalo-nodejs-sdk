@@ -367,6 +367,172 @@ const staticAsyncBulkOrders = await AiraloStatic.orderAsyncBulk(
 > If an error occurs in one of the parallel orders, the error response will be assigned to that package ID's key, so you must validate each response.
 
 
+<h2> Sim Usage </h2>
+
+`async simUsage(string iccid)`<br>
+
+Places an iccid with user iccid  and calls `simUsage` endpoint of the REST API. <br>
+Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+
+```javascript
+const { Airalo } = require('airalo-sdk');
+const { AiraloStatic } = require('airalo-sdk');
+
+async main() {
+    const airalo = new Airalo({
+        client_id: '<YOUR_TOKEN_ID',
+        client_secret: 'YOUR_SECRET',
+        env: 'sandbox'  // or 'production'
+    });
+
+    await airalo.initialize();
+
+    const usage = await airalo.getSimUsage('894000000000048447');
+    console.log(usage);
+}
+
+//
+// Static usage
+//
+async main() {
+    const airalo = AiraloStatic.init({
+        client_id: '<YOUR_TOKEN_ID',
+        client_secret: 'YOUR_SECRET',
+        env: 'sandbox'  // or 'production'
+    });
+
+    const usage = await AiraloStatic.getSimUsage('894000000000048447');
+    console.log(usage);
+}
+```
+
+Example response can be found in the API documentation (link above).<br>
+
+
+`async simUsageBulk(iccids)`<br>
+
+Places an array of iccids and calls `simUsage` endpoint of the REST API in parallel for each of the iccids. <br>
+Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+
+```javascript
+const { Airalo } = require('airalo-sdk');
+const { AiraloStatic } = require('airalo-sdk');
+
+async main() {
+    const airalo = new Airalo({
+        client_id: '<YOUR_TOKEN_ID',
+        client_secret: 'YOUR_SECRET',
+        env: 'sandbox'  // or 'production'
+    });
+
+    await airalo.initialize();
+
+    const usages = await airalo.simUsageBulk(['894000000000048447', '894000000000048448']);
+    console.log(usages);
+}
+
+//
+// Static usage
+//
+async main() {
+    const airalo = AiraloStatic.init({
+        client_id: '<YOUR_TOKEN_ID',
+        client_secret: 'YOUR_SECRET',
+        env: 'sandbox'  // or 'production'
+    });
+
+    const usages = await AiraloStatic.simUsageBulk(['894000000000048447', '894000000000048448']);
+    console.log(usages);
+}
+```
+
+Example response can be found in the API documentation (link above). <br>
+>**_NOTE:_**<br>
+>Each iccid is a key in the returned response.
+><br><b>If an error occurs in one of the parallel usage calls, the error REST response will be assigned to the iccid key, so you must make sure to validate each response</b>
+<br><br>
+<h2> Sim Topups </h2>
+
+`async getSimTopups(iccid)`<br>
+
+Fetches all available topups for the provided `iccid` belonging to an ordered eSIM. <br>
+Full response example can be found here: https://partners-doc.airalo.com/#13535dd3-c337-4122-8e97-2fdb93263e86<br>
+
+```javascript
+const { Airalo } = require('airalo-sdk');
+const { AiraloStatic } = require('airalo-sdk');
+
+async main() {
+    const airalo = new Airalo({
+        client_id: '<YOUR_TOKEN_ID',
+        client_secret: 'YOUR_SECRET',
+        env: 'sandbox'  // or 'production'
+    });
+
+    await airalo.initialize();
+
+    const topups = await airalo.getSimTopups('894000000000048447');
+    console.log(topups);
+}
+
+//
+// Static usage
+//
+async main() {
+    const airalo = AiraloStatic.init({
+        client_id: '<YOUR_TOKEN_ID',
+        client_secret: 'YOUR_SECRET',
+        env: 'sandbox'  // or 'production'
+    });
+
+    const topups = await AiraloStatic.getSimTopups('894000000000048447');
+    console.log(topups);
+}
+```
+
+Example response can be found in the API documentation (link above). <br>
+<br><br>
+<h2> Sim Package History </h2>
+
+`async getSimPackageHistory(iccid)`<br>
+
+Fetches package history for the provided `iccid` belonging to an ordered eSIM. <br>
+Full response example can be found here: https://partners-doc.airalo.com/#5e9bdbcb-dce5-42f7-8e41-d7c1d2dba7a5<br>
+
+```javascript
+const { Airalo } = require('airalo-sdk');
+const { AiraloStatic } = require('airalo-sdk');
+
+async main() {
+    const airalo = new Airalo({
+        client_id: '<YOUR_TOKEN_ID',
+        client_secret: 'YOUR_SECRET',
+        env: 'sandbox'  // or 'production'
+    });
+
+    await airalo.initialize();
+
+    const history = await airalo.getSimPackageHistory('894000000000048447');
+    console.log(history);
+}
+
+//
+// Static usage
+//
+async main() {
+    const airalo = AiraloStatic.init({
+        client_id: '<YOUR_TOKEN_ID',
+        client_secret: 'YOUR_SECRET',
+        env: 'sandbox'  // or 'production'
+    });
+
+    const history = await AiraloStatic.getSimPackageHistory('894000000000048447');
+    console.log(history);
+}
+```
+
+Example response can be found in the API documentation (link above). <br>
+
 # Technical notes
 - Encrypted auth tokens are automatically cached in filesystem for 24h
 - Caching is automatically stored in filesystem for 1h

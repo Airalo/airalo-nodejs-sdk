@@ -4,8 +4,6 @@ const AiraloException = require('../exceptions/AiraloException');
 const API_CONSTANTS = require('../constants/ApiConstants');
 
 class PackagesService {
-    static CACHE_TTL = 3600;
-
     constructor(config, httpClient, accessToken) {
         if (!accessToken) {
             throw new AiraloException('Invalid access token please check your credentials');
@@ -53,7 +51,7 @@ class PackagesService {
                 }
 
                 return params.flat ? this.flatten(result) : result;
-            }, this.getKey(url, params), PackagesService.CACHE_TTL);
+            }, this.getKey(url, params));
 
             return result?.data?.length ? result : null;
         } catch (error) {
