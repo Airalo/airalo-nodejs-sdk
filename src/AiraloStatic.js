@@ -89,7 +89,7 @@ class AiraloStatic {
     });
   }
 
-  static async topup(packageId, iccid, description=null) {
+  static async topup(packageId, iccid, description='Topup placed from Nodejs SDK') {
     return this.services.topupService.createTopup({
       packageId,
       iccid,

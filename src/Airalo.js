@@ -82,7 +82,7 @@ class Airalo {
     });
   }
 
-  async topup(packageId, iccid, description=null) {
+  async topup(packageId, iccid, description='Topup placed from Nodejs SDK') {
     return this.services.topup.createTopup({
       package_id: packageId,
       iccid,
