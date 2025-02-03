@@ -6,6 +6,10 @@ const API_CONSTANTS = {
     ENDPOINTS: {
         TOKEN: 'token',
         PACKAGES: 'packages',
+        SIMS: 'sims',
+        SIMS_USAGE: 'usage',
+        SIMS_TOPUPS: 'topups',
+        SIMS_PACKAGES: 'packages'
     }
 };
 
