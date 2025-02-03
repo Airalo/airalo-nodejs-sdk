@@ -67,8 +67,6 @@ declare module 'airalo-sdk' {
         simPackageHistory(params: { iccid: string }): Promise<SimPackageHistoryResponse | null>;
     }
 
-    // ... other existing type definitions ...
-
     export interface OrderPayload {
         package_id: string;
         quantity: number;
