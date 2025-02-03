@@ -3,6 +3,7 @@ const HttpClient = require('./core/HttpClient');
 const Signature = require('./helpers/Signature');
 const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
+const TopupService = require('./services/TopupService');
 const AiraloException = require('./exceptions/AiraloException');
 
 class AiraloStatic {
@@ -14,7 +15,7 @@ class AiraloStatic {
   static packages;
   static order;
   static voucher;
-  static topup;
+  static topupService;
   static instruction;
   static sim;
 
@@ -88,6 +89,14 @@ class AiraloStatic {
     });
   }
 
+  static async topup(packageId, iccid, description=null) {
+    return this.services.topupService.createTopup({
+      packageId,
+      iccid,
+      description
+    });
+  }
+
   static async initResources(config) {
     this.config = this.pool['config'] ?? new Config(config);
     this.httpClient = this.pool['httpClient'] ?? new HttpClient(this.config);
@@ -99,6 +108,7 @@ class AiraloStatic {
     const token = await this.oauth.getAccessToken();
 
     this.packages = this.pool['packages'] ?? new PackagesService(this.config, this.httpClient, token);
+    this.topupService = this.pool['packages'] ?? new TopupService(this.config, this.httpClient, this.signature, token);
   }
 
   static checkInitialized() {

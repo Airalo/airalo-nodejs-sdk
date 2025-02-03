@@ -6,6 +6,7 @@ const API_CONSTANTS = {
     ENDPOINTS: {
         TOKEN: 'token',
         PACKAGES: 'packages',
+        TOPUPS_SLUG:'orders/topups'
     }
 };
 

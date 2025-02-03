@@ -2,6 +2,7 @@ const Config = require('./core/Config');
 const HttpClient = require('./core/HttpClient');
 const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
+const TopupService = require('./services/TopupService');
 const Signature = require('./helpers/Signature');
 
 class Airalo {
@@ -24,6 +25,13 @@ class Airalo {
     this.services.packages = new PackagesService(
         this.config,
         this.httpClient,
+        this.token
+    );
+
+    this.services.topup = new TopupService(
+        this.config,
+        this.httpClient,
+        this.signature,
         this.token
     );
 
@@ -71,6 +79,14 @@ class Airalo {
       flat,
       limit,
       country: countryCode.toUpperCase()
+    });
+  }
+
+  async topup(packageId, iccid, description=null) {
+    return this.services.topup.createTopup({
+      package_id: packageId,
+      iccid,
+      description
     });
   }
 }
