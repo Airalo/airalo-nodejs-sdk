@@ -57,7 +57,6 @@ declare module 'airalo-sdk' {
         };
     }
 
-    // Updated SimUsageBulkResponse based on your provided structure
     export interface SimUsageBulkResponse {
         [iccid: string]: {
             remaining: number;
@@ -72,7 +71,6 @@ declare module 'airalo-sdk' {
         };
     }
 
-    // Updated SimTopupResponse based on your provided structure
     export interface SimTopupResponse {
         data: Array<{
             id: string;
@@ -90,7 +88,6 @@ declare module 'airalo-sdk' {
         }>;
     }
 
-    // Updated SimPackageHistoryResponse based on your provided structure
     export interface SimPackageHistoryResponse {
         data: Array<{
             id: number;
@@ -99,7 +96,7 @@ declare module 'airalo-sdk' {
             activated_at: string;  // ISO 8601 format of activation date
             expired_at: string;    // ISO 8601 format of expiration date
             finished_at: string | null;
-            package: any;  // Package details, can be further typed based on the structure
+            package: any;
         }>;
     }
 
