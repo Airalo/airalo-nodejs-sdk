@@ -40,6 +40,85 @@ declare module 'airalo-sdk' {
         other_info: any;
     }
 
+    export interface SimUsageResponse {
+        data: {
+            remaining: number;  // Remaining data in MB
+            total: number;      // Total data in MB
+            expired_at: string; // Expiry timestamp
+            is_unlimited: boolean;  // If the data is unlimited
+            status: string;         // Current status (ACTIVE, FINISHED, etc.)
+            remaining_voice: number;  // Remaining voice usage
+            remaining_text: number;   // Remaining text usage
+            total_voice: number;      // Total voice usage
+            total_text: number;       // Total text usage
+        };
+        meta: {
+            message: string;  // Success or error message
+        };
+    }
+
+    export interface SimUsageBulkResponse {
+        [iccid: string]: {
+            remaining: number;
+            total: number;
+            expired_at: string;
+            is_unlimited: boolean;
+            status: string;
+            remaining_voice: number;
+            remaining_text: number;
+            total_voice: number;
+            total_text: number;
+        };
+    }
+
+    export interface SimTopupResponse {
+        data: Array<{
+            id: string;
+            type: string;
+            price: number;
+            amount: number;
+            day: number;
+            is_unlimited: boolean;
+            title: string;
+            data: string;  // Amount of data in GB
+            short_info: string | null;
+            voice: string | null;
+            text: string | null;
+            net_price: number;  // Net price after any deductions
+        }>;
+    }
+
+    export interface SimPackageHistoryResponse {
+        data: Array<{
+            id: number;
+            status: string;
+            remaining: number;
+            activated_at: string;  // ISO 8601 format of activation date
+            expired_at: string;    // ISO 8601 format of expiration date
+            finished_at: string | null;
+            package: any;
+        }>;
+    }
+
+    export interface SimTopupResponse {
+        id: number;
+        iccid: string;
+        status: string;
+        amount: number;
+        currency: string;
+        created_at: string;
+        description: string | null;
+    }
+
+    export interface SimPackageHistoryResponse {
+        iccid: string;
+        history: Array<{
+            package_id: string;
+            activation_date: string;
+            expiration_date: string;
+        }>;
+    }
+
     export interface PackageResponse {
         data: Package[];
         meta?: {
@@ -61,9 +140,9 @@ declare module 'airalo-sdk' {
         package: string | null;
         data: string;
         price: number;
-        text: string | null,
-        voice: string | null,
-        net_price: number | null
+        text: string | null;
+        voice: string | null;
+        net_price: number | null;
         created_at: string;
         manual_installation: string;
         qrcode_installation: string;
@@ -88,31 +167,12 @@ declare module 'airalo-sdk' {
         head(url: string, params?: Record<string, any>): Promise<any>;
     }
 
-    export class SimService {
-        constructor(config: AiraloConfig, httpClient: HttpClient, accessToken: string);
-        simUsage(params: { iccid: string }): Promise<SimUsageResponse | null>;
-        simUsageBulk(iccids: string[]): Promise<Record<string, SimUsageResponse> | null>;
-        simTopups(params: { iccid: string }): Promise<SimTopupResponse | null>;
-        simPackageHistory(params: { iccid: string }): Promise<SimPackageHistoryResponse | null>;
-    }
-
-    export interface OrderPayload {
-        package_id: string;
-        quantity: number;
-        type: string;
-        description?: string;
-        webhook_url?: string;
-    }
-
     export class Signature {
         constructor(secret: string);
         getSignature(payload: any): string | null;
         checkSignature(hash: string | null, payload: any): boolean;
         private preparePayload(payload: any): string | null;
-        private signData(
-            payload: string,
-            algo?: 'sha512' | string
-        ): string;
+        private signData(payload: string, algo?: 'sha512' | string): string;
     }
 
     export class Crypt {
@@ -150,7 +210,6 @@ declare module 'airalo-sdk' {
             country?: string;
         }): Promise<PackageResponse | null>;
     }
-
 
     export class TopupService {
         constructor(config: AiraloConfig, httpClient: HttpClient, signature: Signature, accessToken: string);
@@ -268,13 +327,31 @@ declare module 'airalo-sdk' {
         getLocalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getGlobalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getCountryPackages(countryCode: string, flat?: boolean, limit?: number | null): Promise<PackageResponse | null>;
-        topup(packageId: string, iccid: string, description?: string): Promise <CreateTopupResponse | null>;
 
         // New SIM-related methods
         getSimUsage(iccid: string): Promise<SimUsageResponse | null>;
-        getSimUsageBulk(iccids: string[]): Promise<Record<string, SimUsageResponse> | null>;
+        getSimUsageBulk(iccids: string[]): Promise<SimUsageBulkResponse | null>;
         getSimTopups(iccid: string): Promise<SimTopupResponse | null>;
         getSimPackageHistory(iccid: string): Promise<SimPackageHistoryResponse | null>;
+
+        // Topup method
+        topup(packageId: string, iccid: string, description?: string): Promise<CreateTopupResponse | null>;
+
+        // Order-related methods
+        createOrder(payload: OrderPayload): Promise<OrderResponse>;
+        createOrderWithEmailSimShare(payload: OrderPayload, esimCloud: EsimCloudShare): Promise<OrderResponse>;
+        createOrderAsync(payload: OrderPayload): Promise<AsyncOrderResponse>;
+        createOrderBulk(params: Record<string, number>, description?: string): Promise<Record<string, OrderResponse>>;
+        createOrderBulkWithEmailSimShare(
+            params: Record<string, number>,
+            esimCloud: EsimCloudShare,
+            description?: string
+        ): Promise<Record<string, OrderResponse>>;
+        createOrderAsyncBulk(
+            params: Record<string, number>,
+            webhookUrl?: string,
+            description?: string
+        ): Promise<Record<string, AsyncOrderResponse>>;
     }
 
     export class AiraloStatic {
@@ -282,8 +359,27 @@ declare module 'airalo-sdk' {
 
         // New static SIM-related methods
         static getSimUsage(iccid: string): Promise<SimUsageResponse | null>;
-        static getSimUsageBulk(iccids: string[]): Promise<Record<string, SimUsageResponse> | null>;
+        static getSimUsageBulk(iccids: string[]): Promise<SimUsageBulkResponse | null>;
         static getSimTopups(iccid: string): Promise<SimTopupResponse | null>;
         static getSimPackageHistory(iccid: string): Promise<SimPackageHistoryResponse | null>;
+
+        // Topup static method
+        static topup(packageId: string, iccid: string, description?: string): Promise<CreateTopupResponse | null>;
+
+        // Order-related static methods
+        static createOrder(payload: OrderPayload): Promise<OrderResponse>;
+        static createOrderWithEmailSimShare(payload: OrderPayload, esimCloud: EsimCloudShare): Promise<OrderResponse>;
+        static createOrderAsync(payload: OrderPayload): Promise<AsyncOrderResponse>;
+        static createOrderBulk(params: Record<string, number>, description?: string): Promise<Record<string, OrderResponse>>;
+        static createOrderBulkWithEmailSimShare(
+            params: Record<string, number>,
+            esimCloud: EsimCloudShare,
+            description?: string
+        ): Promise<Record<string, OrderResponse>>;
+        static createOrderAsyncBulk(
+            params: Record<string, number>,
+            webhookUrl?: string,
+            description?: string
+        ): Promise<Record<string, AsyncOrderResponse>>;
     }
 }
