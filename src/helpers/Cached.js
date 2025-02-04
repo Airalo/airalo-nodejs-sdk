@@ -8,36 +8,31 @@ class Cached {
     static TTL = SDK_CONSTANTS.CACHE.TTL;
     static cachePath = path.join(process.cwd(), '.cache');
 
-    static async get(work, cacheName, ttl = 0) {
+    static async get(work, cacheName, ttl = 3600) {
         await this.init();
         const id = this.getID(cacheName);
 
         try {
-            // Try to get from cache
             const cacheFile = path.join(this.cachePath, id);
 
             try {
                 const cacheData = await fs.readFile(cacheFile, 'utf8');
                 const { data, expiresAt } = JSON.parse(cacheData);
 
-                // Check if cache is still valid
                 if (expiresAt > Date.now()) {
                     return data;
                 }
 
-                // Cache expired, delete it
                 await fs.unlink(cacheFile);
             } catch (error) {
                 // Cache miss or invalid cache
             }
 
-            // Execute work function
-            const result = typeof work === 'function' ?
-                await work() :
-                work;
+            const result = typeof work === 'function'
+                ? await work()
+                : work;
 
             if (result) {
-                // Store with expiration
                 const cacheData = {
                     data: result,
                     expiresAt: Date.now() + (ttl || this.TTL) * 1000
@@ -52,11 +47,10 @@ class Cached {
 
             return result;
         } catch (error) {
-            console.error('Cache error:', error);
             // On cache error, still return the work result
-            return typeof work === 'function' ?
-                await work() :
-                work;
+            return typeof work === 'function'
+                ? await work()
+                : work;
         }
     }
 
