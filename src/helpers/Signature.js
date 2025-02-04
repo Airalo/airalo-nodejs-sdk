@@ -31,7 +31,7 @@ class Signature {
             // remove all whitespaces from JSON string
             try {
                 payload = JSON.stringify(JSON.parse(payload));
-            } catch (e) {
+            } catch {
                 return null;
             }
         }

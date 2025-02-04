@@ -24,7 +24,7 @@ class Cached {
                 }
 
                 await fs.unlink(cacheFile);
-            } catch (error) {
+            } catch {
                 // Cache miss or invalid cache
             }
 
@@ -46,7 +46,7 @@ class Cached {
             }
 
             return result;
-        } catch (error) {
+        } catch {
             // On cache error, still return the work result
             return typeof work === 'function'
                 ? await work()

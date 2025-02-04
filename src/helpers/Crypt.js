@@ -28,7 +28,7 @@ class Crypt {
             ]).toString('base64');
 
             return result;
-        } catch (error) {
+        } catch {
             return data;
         }
     }
@@ -58,7 +58,7 @@ class Crypt {
             decrypted += decipher.final();
 
             return decrypted.toString();
-        } catch (error) {
+        } catch {
             return data;
         }
     }
@@ -71,7 +71,7 @@ class Crypt {
             const buffer = Buffer.from(data, 'base64');
             return buffer.length >= 56 &&
                 buffer.toString('base64') === data;
-        } catch (error) {
+        } catch {
             return false;
         }
     }
