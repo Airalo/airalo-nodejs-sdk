@@ -16,21 +16,13 @@ class TopupService {
     async createTopup(payload) {
         this.validateTopup(payload);
 
-        const response = await this.httpClient
+        return await this.httpClient
             .setHeaders([
                 'Content-Type: application/json',
                 `Authorization: Bearer ${this.accessToken}`,
                 `airalo-signature: ${this.signature.getSignature(payload)}`
             ])
             .post(`${this.config.getUrl()}${API_CONSTANTS.ENDPOINTS.TOPUPS_SLUG}`, payload);
-
-        if (this.httpClient.code !== 200) {
-            throw new AiraloException(
-                `Topup creation failed, status code: ${this.httpClient.code}, response: ${JSON.stringify(response)}`
-            );
-        }
-
-        return response;
     }
 
     validateTopup(payload) {
