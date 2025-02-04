@@ -48,7 +48,7 @@ declare module 'airalo-sdk' {
         };
     }
 
-    export interface OrderResponse {
+    export interface TopupOrderResponse {
         id: number;
         code: string;
         package_id: string;
@@ -71,7 +71,7 @@ declare module 'airalo-sdk' {
     }
 
     export interface CreateTopupResponse {
-        data: OrderResponse;
+        data: TopupOrderResponse;
         meta?: {
             message: string;
         };
@@ -257,6 +257,7 @@ declare module 'airalo-sdk' {
             webhookUrl?: string,
             description?: string
         ): Promise<Record<string, AsyncOrderResponse>>;
+    }
 
     export default class Airalo {
         constructor(config: AiraloConfig);
