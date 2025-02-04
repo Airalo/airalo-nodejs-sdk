@@ -3,6 +3,7 @@ const HttpClient = require('./core/HttpClient');
 const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
 const OrderService = require('./services/OrderService');
+const TopupService = require('./services/TopupService');
 const Signature = require('./helpers/Signature');
 const SimService = require('./services/SimService');
 
@@ -39,6 +40,13 @@ class Airalo {
     this.services.sims = new SimService(
         this.config,
         this.httpClient,
+        this.token
+    );
+
+    this.services.topup = new TopupService(
+        this.config,
+        this.httpClient,
+        this.signature,
         this.token
     );
 
@@ -86,6 +94,14 @@ class Airalo {
       flat,
       limit,
       country: countryCode.toUpperCase()
+    });
+  }
+
+  async topup(packageId, iccid, description='Topup placed from Nodejs SDK') {
+    return this.services.topup.createTopup({
+      package_id: packageId,
+      iccid,
+      description
     });
   }
 

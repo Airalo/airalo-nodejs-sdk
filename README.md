@@ -533,6 +533,46 @@ async main() {
 
 Example response can be found in the API documentation (link above). <br>
 
+
+<h2> Topups </h2>
+
+`async topup(packageId, iccid, description=null)`<br>
+
+Places a topup for a given package id and iccid of an eSIM and calls `topups` endpoint of the REST API.<br>
+Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+
+```javascript
+
+const { Airalo } = require('airalo-sdk');
+
+const airalo = new Airalo({
+    client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
+    client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
+    env: 'sandbox',                                 // optional, defaults to `production`
+});
+
+// Must initialize before using
+await airalo.initialize();
+
+const allPackages = await airalo.topup(packageId, iccid);
+
+
+//
+// Static usage
+//
+const { AiraloStatic } = require('airalo-sdk');
+
+// `init` must be called before using any of the methods
+await AiraloStatic.init({
+    client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
+    client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
+    env: 'sandbox',                                 // optional, defaults to `production`
+});
+
+const allPackages = await AiraloStatic.topup(packageId, iccid);
+```
+
+
 # Technical notes
 - Encrypted auth tokens are automatically cached in filesystem for 24h
 - Caching is automatically stored in filesystem for 1h

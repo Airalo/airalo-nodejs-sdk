@@ -4,6 +4,7 @@ const Signature = require('./helpers/Signature');
 const OAuthService = require('./services/OAuthService');
 const PackagesService = require('./services/PackagesService');
 const OrderService = require('./services/OrderService');
+const TopupService = require('./services/TopupService');
 const AiraloException = require('./exceptions/AiraloException');
 const SimService = require('./services/SimService');
 
@@ -16,7 +17,7 @@ class AiraloStatic {
   static packages;
   static order;
   static voucher;
-  static topup;
+  static topupService;
   static instruction;
   static sim;
 
@@ -170,6 +171,14 @@ class AiraloStatic {
     return this.sim.simPackageHistory({ iccid });
   }
 
+  static async topup(packageId, iccid, description='Topup placed from Nodejs SDK') {
+    return this.services.topupService.createTopup({
+      packageId,
+      iccid,
+      description
+    });
+  }
+
   static async initResources(config) {
     this.config = this.pool['config'] ?? new Config(config);
     this.httpClient = this.pool['httpClient'] ?? new HttpClient(this.config);
@@ -183,6 +192,7 @@ class AiraloStatic {
     this.packages = this.pool['packages'] ?? new PackagesService(this.config, this.httpClient, token);
     this.order = this.pool['order'] ?? new OrderService(this.config, this.httpClient, this.signature, token);
     this.sim = this.pool['sims'] ?? new SimService(this.config, this.httpClient, token);
+    this.topupService = this.pool['packages'] ?? new TopupService(this.config, this.httpClient, this.signature, token);
   }
 
   static checkInitialized() {

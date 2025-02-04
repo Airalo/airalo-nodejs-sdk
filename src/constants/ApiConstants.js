@@ -11,7 +11,8 @@ const API_CONSTANTS = {
         SIMS: 'sims',
         SIMS_USAGE: 'usage',
         SIMS_TOPUPS: 'topups',
-        SIMS_PACKAGES: 'packages'
+        SIMS_PACKAGES: 'packages',
+        TOPUPS_SLUG:'orders/topups'
     }
 };
 

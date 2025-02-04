@@ -48,6 +48,35 @@ declare module 'airalo-sdk' {
         };
     }
 
+    export interface TopupOrderResponse {
+        id: number;
+        code: string;
+        package_id: string;
+        currency: string;
+        quantity: number;
+        type: string;
+        description: string;
+        esim_type: string;
+        validity: number;
+        package: string | null;
+        data: string;
+        price: number;
+        text: string | null,
+        voice: string | null,
+        net_price: number | null
+        created_at: string;
+        manual_installation: string;
+        qrcode_installation: string;
+        installation_guides: string;
+    }
+
+    export interface CreateTopupResponse {
+        data: TopupOrderResponse;
+        meta?: {
+            message: string;
+        };
+    }
+
     export class HttpClient {
         constructor(config: AiraloConfig);
         setHeaders(headers: string[]): this;
@@ -73,6 +102,68 @@ declare module 'airalo-sdk' {
         type: string;
         description?: string;
         webhook_url?: string;
+    }
+
+    export class Signature {
+        constructor(secret: string);
+        getSignature(payload: any): string | null;
+        checkSignature(hash: string | null, payload: any): boolean;
+        private preparePayload(payload: any): string | null;
+        private signData(
+            payload: string,
+            algo?: 'sha512' | string
+        ): string;
+    }
+
+    export class Crypt {
+        static encrypt(data: string, key: string): string;
+        static decrypt(data: string, key: string): string;
+        static isEncrypted(data: any): boolean;
+        static md5(str: string): string;
+    }
+
+    export class Cached {
+        static readonly CACHE_KEY: string;
+        static readonly TTL: number;
+        static readonly cachePath: string;
+
+        static get<T>(
+            work: (() => Promise<T>) | (() => T) | T,
+            cacheName: string,
+            ttl?: number
+        ): Promise<T>;
+
+        static clearCache(): Promise<void>;
+
+        private static init(): Promise<void>;
+        private static getID(key: string): string;
+    }
+
+    export class PackagesService {
+        constructor(config: AiraloConfig, httpClient: HttpClient, accessToken: string);
+        getPackages(params?: {
+            flat?: boolean;
+            limit?: number | null;
+            page?: number | null;
+            simOnly?: boolean;
+            type?: 'local' | 'global';
+            country?: string;
+        }): Promise<PackageResponse | null>;
+    }
+
+
+    export class TopupService {
+        constructor(config: AiraloConfig, httpClient: HttpClient, signature: Signature, accessToken: string);
+        createTopup(params: {
+            packageId: string;
+            iccid: string;
+            description?: string | null;
+        }): Promise<CreateTopupResponse>;
+    }
+
+    export class OAuthService {
+        constructor(config: AiraloConfig, httpClient: HttpClient, signature: Signature);
+        getAccessToken(): Promise<string>;
     }
 
     export interface EsimCloudShare {
@@ -177,6 +268,7 @@ declare module 'airalo-sdk' {
         getLocalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getGlobalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getCountryPackages(countryCode: string, flat?: boolean, limit?: number | null): Promise<PackageResponse | null>;
+        topup(packageId: string, iccid: string, description?: string): Promise <CreateTopupResponse | null>;
 
         // New SIM-related methods
         getSimUsage(iccid: string): Promise<SimUsageResponse | null>;
@@ -187,7 +279,7 @@ declare module 'airalo-sdk' {
 
     export class AiraloStatic {
         static init(config: AiraloConfig): Promise<void>;
-        
+
         // New static SIM-related methods
         static getSimUsage(iccid: string): Promise<SimUsageResponse | null>;
         static getSimUsageBulk(iccids: string[]): Promise<Record<string, SimUsageResponse> | null>;
