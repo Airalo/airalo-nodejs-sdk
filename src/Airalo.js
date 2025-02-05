@@ -1,11 +1,11 @@
-const Config = require('./core/Config');
-const HttpClient = require('./core/HttpClient');
-const OAuthService = require('./services/OAuthService');
-const PackagesService = require('./services/PackagesService');
-const OrderService = require('./services/OrderService');
-const TopupService = require('./services/TopupService');
-const Signature = require('./helpers/Signature');
-const SimService = require('./services/SimService');
+const Config = require("./core/Config");
+const HttpClient = require("./core/HttpClient");
+const OAuthService = require("./services/OAuthService");
+const PackagesService = require("./services/PackagesService");
+const OrderService = require("./services/OrderService");
+const TopupService = require("./services/TopupService");
+const Signature = require("./helpers/Signature");
+const SimService = require("./services/SimService");
 
 class Airalo {
   constructor(config) {
@@ -25,29 +25,29 @@ class Airalo {
 
     // Initialize services
     this.services.packages = new PackagesService(
-        this.config,
-        this.httpClient,
-        this.token
+      this.config,
+      this.httpClient,
+      this.token,
     );
 
     this.services.order = new OrderService(
-        this.config,
-        this.httpClient,
-        this.signature,
-        this.token
+      this.config,
+      this.httpClient,
+      this.signature,
+      this.token,
     );
 
     this.services.sims = new SimService(
-        this.config,
-        this.httpClient,
-        this.token
+      this.config,
+      this.httpClient,
+      this.token,
     );
 
     this.services.topup = new TopupService(
-        this.config,
-        this.httpClient,
-        this.signature,
-        this.token
+      this.config,
+      this.httpClient,
+      this.signature,
+      this.token,
     );
 
     return this;
@@ -58,7 +58,7 @@ class Airalo {
     return this.services.packages.getPackages({
       flat,
       limit,
-      page
+      page,
     });
   }
 
@@ -67,7 +67,7 @@ class Airalo {
       flat,
       limit,
       page,
-      simOnly: true
+      simOnly: true,
     });
   }
 
@@ -76,7 +76,7 @@ class Airalo {
       flat,
       limit,
       page,
-      type: 'local'
+      type: "local",
     });
   }
 
@@ -85,7 +85,7 @@ class Airalo {
       flat,
       limit,
       page,
-      type: 'global'
+      type: "global",
     });
   }
 
@@ -93,15 +93,15 @@ class Airalo {
     return this.services.packages.getPackages({
       flat,
       limit,
-      country: countryCode.toUpperCase()
+      country: countryCode.toUpperCase(),
     });
   }
 
-  async topup(packageId, iccid, description='Topup placed from Nodejs SDK') {
+  async topup(packageId, iccid, description = "Topup placed from Nodejs SDK") {
     return this.services.topup.createTopup({
       package_id: packageId,
       iccid,
-      description
+      description,
     });
   }
 
@@ -110,20 +110,25 @@ class Airalo {
     return this.services.order.createOrder({
       package_id: packageId,
       quantity,
-      type: 'sim',
-      description: description ?? 'Order placed via Airalo Node.js SDK'
+      type: "sim",
+      description: description ?? "Order placed via Airalo Node.js SDK",
     });
   }
 
-  async orderWithEmailSimShare(packageId, quantity, esimCloud, description = null) {
+  async orderWithEmailSimShare(
+    packageId,
+    quantity,
+    esimCloud,
+    description = null,
+  ) {
     return this.services.order.createOrderWithEmailSimShare(
-        {
-          package_id: packageId,
-          quantity,
-          type: 'sim',
-          description: description ?? 'Order placed via Airalo Node.js SDK'
-        },
-        esimCloud
+      {
+        package_id: packageId,
+        quantity,
+        type: "sim",
+        description: description ?? "Order placed via Airalo Node.js SDK",
+      },
+      esimCloud,
     );
   }
 
@@ -131,9 +136,9 @@ class Airalo {
     return this.services.order.createOrderAsync({
       package_id: packageId,
       quantity,
-      type: 'sim',
-      description: description ?? 'Order placed via Airalo Node.js SDK',
-      webhook_url: webhookUrl
+      type: "sim",
+      description: description ?? "Order placed via Airalo Node.js SDK",
+      webhook_url: webhookUrl,
     });
   }
 
@@ -148,14 +153,22 @@ class Airalo {
     if (!packages || Object.keys(packages).length === 0) {
       return null;
     }
-    return this.services.order.createOrderBulkWithEmailSimShare(packages, esimCloud, description);
+    return this.services.order.createOrderBulkWithEmailSimShare(
+      packages,
+      esimCloud,
+      description,
+    );
   }
 
   async orderAsyncBulk(packages, webhookUrl = null, description = null) {
     if (!packages || Object.keys(packages).length === 0) {
       return null;
     }
-    return this.services.order.createOrderAsyncBulk(packages, webhookUrl, description);
+    return this.services.order.createOrderAsyncBulk(
+      packages,
+      webhookUrl,
+      description,
+    );
   }
 
   async getSimUsage(iccid) {

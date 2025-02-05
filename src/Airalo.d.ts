@@ -231,6 +231,14 @@ declare module 'airalo-sdk' {
         copy_address?: string[];
     }
 
+    export interface OrderPayload {
+        package_id: string;
+        quantity: number;
+        type: string;
+        description?: string;
+        webhook_url?: string;
+    }
+
     export interface OrderResponse {
         data: {
             id: number;

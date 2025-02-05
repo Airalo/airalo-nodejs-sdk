@@ -4,7 +4,8 @@
   "description": "Airalo's Partner API NodeJS SDK",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,12 @@
   "bugs": {
     "url": "https://github.com/Airalo/airalo-nodejs-sdk/issues"
   },
-  "homepage": "https://github.com/Airalo/airalo-nodejs-sdk#readme"
+  "homepage": "https://github.com/Airalo/airalo-nodejs-sdk#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^15.14.0"
+  }
 }
