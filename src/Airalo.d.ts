@@ -294,6 +294,48 @@ declare module 'airalo-sdk' {
         };
     }
 
+    export interface EsimVoucherInput {
+        package_id: string;
+        quantity: number;
+    }
+
+    export interface EsimVoucherOutputItem {
+        package_id: string;
+        codes: string[];
+        booking_reference: string | null;
+    }
+
+    export interface EsimVouchersResponse {
+        data: EsimVoucherOutputItem[];
+        meta: {
+            message: string;
+        };
+    }
+
+    export interface VoucherInput {
+        voucher_code?: string | null;
+        usage_limit: number;
+        amount: number;
+        quantity: number;
+        is_paid: boolean;
+    }
+
+    export interface VoucherOutputItem {
+        id: number;
+        code: string;
+        usage_limit: number;
+        amount: number;
+        is_paid: boolean;
+        created_at: string;
+    }
+
+    export interface VoucherResponse {
+        data: VoucherOutputItem[][];
+        meta: {
+            message: string;
+        };
+    }
+
     export class OrderService {
         constructor(
             config: AiraloConfig,
@@ -352,6 +394,17 @@ declare module 'airalo-sdk' {
             webhookUrl?: string,
             description?: string
         ): Promise<Record<string, AsyncOrderResponse>>;
+
+        // Voucher-related methods
+        voucher(
+            usageLimit: number, 
+            amount: number, 
+            quantity: number, 
+            isPaid?: boolean, 
+            voucherCode?: string | null
+        ): Promise<VoucherResponse | null>;
+
+        esimVouchers(payload: { vouchers: EsimVoucherInput[] }): Promise<EsimVouchersResponse | null>;
     }
 
     export class AiraloStatic {
@@ -381,5 +434,16 @@ declare module 'airalo-sdk' {
             webhookUrl?: string,
             description?: string
         ): Promise<Record<string, AsyncOrderResponse>>;
+
+        // Voucher-related static methods
+        static voucher(
+            usageLimit: number, 
+            amount: number, 
+            quantity: number, 
+            isPaid?: boolean, 
+            voucherCode?: string | null
+        ): Promise<VoucherResponse | null>;
+
+        static esimVouchers(payload: { vouchers: EsimVoucherInput[] }): Promise<EsimVouchersResponse | null>;
     }
 }

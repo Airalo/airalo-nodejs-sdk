@@ -572,6 +572,125 @@ await AiraloStatic.init({
 const allPackages = await AiraloStatic.topup(packageId, iccid);
 ```
 
+<h2> Vouchers </h2>
+
+`async voucher(usageLimit, amount, quantity, isPaid = false, voucherCode = null)` method calls the `voucher` endpoint of the REST API.
+Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9
+
+```javascript
+const { Airalo } = require('airalo-sdk');
+
+const airalo = new Airalo({
+    client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
+    client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
+    env: 'sandbox',                                 // optional, defaults to `production`
+});
+
+// Must initialize before using
+await airalo.initialize();
+
+const vouchers = await airalo.voucher(40, 22, 1, false, 'ABC111');
+
+
+//
+// Static usage
+//
+const { Airalo } = require('airalo-sdk');
+
+await AiraloStatic.init({
+    client_id: '<YOUR_API_CLIENT_ID>',
+    client_secret: '<YOUR_API_CLIENT_SECRET>'
+});
+
+const staticVouchers = await AiraloStatic.voucher(40, 22, 1, false, 'ABC111');
+```
+
+Example response:
+```json
+{
+  "data": [
+    [
+      {
+        "id": 677073,
+        "code": "MIRO4",
+        "usage_limit": 10,
+        "amount": 1,
+        "is_paid": false,
+        "created_at": "2025-02-05 13:51:31"
+      }
+    ]
+  ],
+  "meta": {
+    "message": "success"
+  }
+}
+```
+
+<h2>Esim Vouchers</h2>
+
+`async esimVouchers(vouchers)` method calls the `voucher/esim` endpoint of the REST API.
+Full response example can be found here: https://partners-doc.airalo.com/#5a48bb8d-70d1-4030-ad92-4a82eb979281
+
+```javascript
+const { Airalo } = require('airalo-sdk');
+
+const airalo = new Airalo({
+    client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
+    client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
+    env: 'sandbox',                                 // optional, defaults to `production`
+});
+
+// Must initialize before using
+await airalo.initialize();
+
+const vouchers = await airalo.esimVouchers({
+    vouchers: [
+        {
+            package_id: "package_slug",
+            quantity: 2
+        }
+    ]
+});
+
+
+//
+// Static usage
+//
+const { Airalo } = require('airalo-sdk');
+
+await AiraloStatic.init({
+    client_id: '<YOUR_API_CLIENT_ID>',
+    client_secret: '<YOUR_API_CLIENT_SECRET>'
+});
+
+const staticVouchers = await AiraloStatic.esimVouchers({
+    vouchers: [
+        {
+            package_id: "package_slug",
+            quantity: 1
+        }
+    ]
+});
+```
+
+Example response:
+```json
+{
+  "data": [
+    {
+      "package_id": "merhaba-7days-1gb",
+      "codes": [
+        "XAB80SO2"
+      ],
+      "booking_reference": null
+    }
+  ],
+  "meta": {
+    "message": "success"
+  }
+}
+```
+
 
 # Technical notes
 - Encrypted auth tokens are automatically cached in filesystem for 24h
