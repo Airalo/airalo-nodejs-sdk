@@ -1,13 +1,13 @@
-const Config = require('./core/Config');
-const HttpClient = require('./core/HttpClient');
-const OAuthService = require('./services/OAuthService');
-const PackagesService = require('./services/PackagesService');
-const OrderService = require('./services/OrderService');
-const TopupService = require('./services/TopupService');
-const Signature = require('./helpers/Signature');
-const SimService = require('./services/SimService');
-const VoucherService = require('./services/VoucherService');
-const AiraloException = require('./exceptions/AiraloException');
+const Config = require("./core/Config");
+const HttpClient = require("./core/HttpClient");
+const OAuthService = require("./services/OAuthService");
+const PackagesService = require("./services/PackagesService");
+const OrderService = require("./services/OrderService");
+const TopupService = require("./services/TopupService");
+const Signature = require("./helpers/Signature");
+const SimService = require("./services/SimService");
+const VoucherService = require("./services/VoucherService");
+const AiraloException = require("./exceptions/AiraloException");
 
 class Airalo {
   constructor(config) {
@@ -46,7 +46,7 @@ class Airalo {
     return this.services.packages.getPackages({
       flat,
       limit,
-      page
+      page,
     });
   }
 
@@ -57,7 +57,7 @@ class Airalo {
       flat,
       limit,
       page,
-      simOnly: true
+      simOnly: true,
     });
   }
 
@@ -68,7 +68,7 @@ class Airalo {
       flat,
       limit,
       page,
-      type: 'local'
+      type: "local",
     });
   }
 
@@ -79,7 +79,7 @@ class Airalo {
       flat,
       limit,
       page,
-      type: 'global'
+      type: "global",
     });
   }
 
@@ -89,7 +89,7 @@ class Airalo {
     return this.services.packages.getPackages({
       flat,
       limit,
-      country: countryCode.toUpperCase()
+      country: countryCode.toUpperCase(),
     });
   }
 
@@ -99,7 +99,7 @@ class Airalo {
     return this.services.topup.createTopup({
       package_id: packageId,
       iccid,
-      description
+      description,
     });
   }
 
@@ -110,8 +110,8 @@ class Airalo {
     return this.services.order.createOrder({
       package_id: packageId,
       quantity,
-      type: 'sim',
-      description: description ?? 'Order placed via Airalo Node.js SDK'
+      type: "sim",
+      description: description ?? "Order placed via Airalo Node.js SDK",
     });
   }
 
@@ -122,10 +122,10 @@ class Airalo {
       {
         package_id: packageId,
         quantity,
-        type: 'sim',
-        description: description ?? 'Order placed via Airalo Node.js SDK'
+        type: "sim",
+        description: description ?? "Order placed via Airalo Node.js SDK",
       },
-      esimCloud
+      esimCloud,
     );
   }
 
@@ -135,9 +135,9 @@ class Airalo {
     return this.services.order.createOrderAsync({
       package_id: packageId,
       quantity,
-      type: 'sim',
-      description: description ?? 'Order placed via Airalo Node.js SDK',
-      webhook_url: webhookUrl
+      type: "sim",
+      description: description ?? "Order placed via Airalo Node.js SDK",
+      webhook_url: webhookUrl,
     });
   }
 
@@ -156,7 +156,11 @@ class Airalo {
     if (!packages || Object.keys(packages).length === 0) {
       return null;
     }
-    return this.services.order.createOrderBulkWithEmailSimShare(packages, esimCloud, description);
+    return this.services.order.createOrderBulkWithEmailSimShare(
+      packages,
+      esimCloud,
+      description,
+    );
   }
 
   async orderAsyncBulk(packages, webhookUrl = null, description = null) {
@@ -165,7 +169,11 @@ class Airalo {
     if (!packages || Object.keys(packages).length === 0) {
       return null;
     }
-    return this.services.order.createOrderAsyncBulk(packages, webhookUrl, description);
+    return this.services.order.createOrderAsyncBulk(
+      packages,
+      webhookUrl,
+      description,
+    );
   }
 
   async getSimUsage(iccid) {
@@ -214,7 +222,7 @@ class Airalo {
 
   _isInitialised() {
     if (!this.initCalled) {
-      throw new AiraloException('Airalo SDK not initialized. Please call initialize() method first.');
+      throw new AiraloException("Airalo SDK not initialized. Please call initialize() method first.");
     }
   }
 }
