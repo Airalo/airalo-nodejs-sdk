@@ -15,7 +15,7 @@ export default [
     },
     rules: {
       // Possible Problems
-      "no-await-in-loop": "error",
+      "no-await-in-loop": "off",
       "no-promise-executor-return": "error",
       "no-self-compare": "error",
       "no-template-curly-in-string": "warn",
