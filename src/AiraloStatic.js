@@ -197,7 +197,11 @@ class AiraloStatic {
     return this.simService.simPackageHistory({ iccid });
   }
 
-  static async topup(packageId, iccid, description = "Topup placed from Nodejs SDK") {
+  static async topup(
+    packageId,
+    iccid,
+    description = "Topup placed from Nodejs SDK",
+  ) {
     this.checkInitialized();
     return this.topupService.createTopup({
       packageId,
@@ -206,39 +210,27 @@ class AiraloStatic {
     });
   }
 
-  static async voucher(usageLimit, amount, quantity, isPaid = false, voucherCode = null) {
+  static async voucher(
+    usageLimit,
+    amount,
+    quantity,
+    isPaid = false,
+    voucherCode = null,
+  ) {
     this.checkInitialized();
     return this.voucherService.createVoucher({
       voucher_code: voucherCode,
       usage_limit: usageLimit,
       amount,
       quantity,
-      is_paid: isPaid
+      is_paid: isPaid,
     });
   }
 
   static async esimVouchers(payload) {
     this.checkInitialized();
     return this.voucherService.createEsimVoucher({
-      vouchers: payload?.vouchers
-    });
-  }
-
-  static async voucher(usageLimit, amount, quantity, isPaid = false, voucherCode = null) {
-    this.checkInitialized();
-    return this.voucherService.createVoucher({
-      voucher_code: voucherCode,
-      usage_limit: usageLimit,
-      amount,
-      quantity,
-      is_paid: isPaid
-    });
-  }
-
-  static async esimVouchers(payload) {
-    this.checkInitialized();
-    return this.voucherService.createEsimVoucher({
-      vouchers: payload?.vouchers
+      vouchers: payload?.vouchers,
     });
   }
 
@@ -255,11 +247,20 @@ class AiraloStatic {
       new OAuthService(this.config, this.httpClient, this.signature);
     const token = await this.oauth.getAccessToken();
 
-    this.packages = this.pool['packages'] ?? new PackagesService(this.config, this.httpClient, token);
-    this.orderService = this.pool['orderService'] ?? new OrderService(this.config, this.httpClient, this.signature, token);
-    this.sim = this.pool['sims'] ?? new SimService(this.config, this.httpClient, token);
-    this.topupService = this.pool['packages'] ?? new TopupService(this.config, this.httpClient, this.signature, token);
-    this.voucherService = this.pool['voucherService'] ?? new VoucherService(this.config, this.httpClient, this.signature, token);
+    this.packages =
+      this.pool["packages"] ??
+      new PackagesService(this.config, this.httpClient, token);
+    this.orderService =
+      this.pool["orderService"] ??
+      new OrderService(this.config, this.httpClient, this.signature, token);
+    this.sim =
+      this.pool["sims"] ?? new SimService(this.config, this.httpClient, token);
+    this.topupService =
+      this.pool["packages"] ??
+      new TopupService(this.config, this.httpClient, this.signature, token);
+    this.voucherService =
+      this.pool["voucherService"] ??
+      new VoucherService(this.config, this.httpClient, this.signature, token);
     this.packagesService =
       this.pool["packages"] ??
       new PackagesService(this.config, this.httpClient, token);

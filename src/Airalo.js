@@ -28,11 +28,34 @@ class Airalo {
     this.token = await this.oauth.getAccessToken();
 
     // Initialize services
-    this.services.packages = new PackagesService(this.config, this.httpClient, this.token);
-    this.services.order = new OrderService(this.config, this.httpClient, this.signature, this.token);
-    this.services.sims = new SimService(this.config, this.httpClient, this.token);
-    this.services.topup = new TopupService(this.config, this.httpClient, this.signature, this.token);
-    this.services.vouchers = new VoucherService(this.config, this.httpClient, this.signature, this.token);
+    this.services.packages = new PackagesService(
+      this.config,
+      this.httpClient,
+      this.token,
+    );
+    this.services.order = new OrderService(
+      this.config,
+      this.httpClient,
+      this.signature,
+      this.token,
+    );
+    this.services.sims = new SimService(
+      this.config,
+      this.httpClient,
+      this.token,
+    );
+    this.services.topup = new TopupService(
+      this.config,
+      this.httpClient,
+      this.signature,
+      this.token,
+    );
+    this.services.vouchers = new VoucherService(
+      this.config,
+      this.httpClient,
+      this.signature,
+      this.token,
+    );
 
     this.initCalled = true;
 
@@ -93,7 +116,7 @@ class Airalo {
     });
   }
 
-  async topup(packageId, iccid, description = 'Topup placed from Nodejs SDK') {
+  async topup(packageId, iccid, description = "Topup placed from Nodejs SDK") {
     this._isInitialised();
 
     return this.services.topup.createTopup({
@@ -115,7 +138,12 @@ class Airalo {
     });
   }
 
-  async orderWithEmailSimShare(packageId, quantity, esimCloud, description = null) {
+  async orderWithEmailSimShare(
+    packageId,
+    quantity,
+    esimCloud,
+    description = null,
+  ) {
     this._isInitialised();
 
     return this.services.order.createOrderWithEmailSimShare(
@@ -200,7 +228,13 @@ class Airalo {
     return this.services.sims.simPackageHistory({ iccid });
   }
 
-  async voucher(usageLimit, amount, quantity, isPaid = false, voucherCode = null) {
+  async voucher(
+    usageLimit,
+    amount,
+    quantity,
+    isPaid = false,
+    voucherCode = null,
+  ) {
     this._isInitialised();
 
     return this.services.vouchers.createVoucher({
@@ -208,7 +242,7 @@ class Airalo {
       usage_limit: usageLimit,
       amount,
       quantity,
-      is_paid: isPaid
+      is_paid: isPaid,
     });
   }
 
@@ -216,13 +250,15 @@ class Airalo {
     this._isInitialised();
 
     return this.services.vouchers.createEsimVoucher({
-      vouchers: payload?.vouchers
+      vouchers: payload?.vouchers,
     });
   }
 
   _isInitialised() {
     if (!this.initCalled) {
-      throw new AiraloException("Airalo SDK not initialized. Please call initialize() method first.");
+      throw new AiraloException(
+        "Airalo SDK not initialized. Please call initialize() method first.",
+      );
     }
   }
 }
