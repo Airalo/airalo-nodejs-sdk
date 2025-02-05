@@ -6,10 +6,14 @@ const OrderService = require("./services/OrderService");
 const TopupService = require("./services/TopupService");
 const Signature = require("./helpers/Signature");
 const SimService = require("./services/SimService");
+const VoucherService = require("./services/VoucherService");
+const AiraloException = require("./exceptions/AiraloException");
 
 class Airalo {
   constructor(config) {
     this.initResources(config);
+
+    this.initCalled = false;
   }
 
   initResources(config) {
@@ -29,32 +33,39 @@ class Airalo {
       this.httpClient,
       this.token,
     );
-
     this.services.order = new OrderService(
       this.config,
       this.httpClient,
       this.signature,
       this.token,
     );
-
     this.services.sims = new SimService(
       this.config,
       this.httpClient,
       this.token,
     );
-
     this.services.topup = new TopupService(
       this.config,
       this.httpClient,
       this.signature,
       this.token,
     );
+    this.services.vouchers = new VoucherService(
+      this.config,
+      this.httpClient,
+      this.signature,
+      this.token,
+    );
+
+    this.initCalled = true;
 
     return this;
   }
 
   // Package methods
   async getAllPackages(flat = false, limit = null, page = null) {
+    this._isInitialised();
+
     return this.services.packages.getPackages({
       flat,
       limit,
@@ -63,6 +74,8 @@ class Airalo {
   }
 
   async getSimPackages(flat = false, limit = null, page = null) {
+    this._isInitialised();
+
     return this.services.packages.getPackages({
       flat,
       limit,
@@ -72,6 +85,8 @@ class Airalo {
   }
 
   async getLocalPackages(flat = false, limit = null, page = null) {
+    this._isInitialised();
+
     return this.services.packages.getPackages({
       flat,
       limit,
@@ -81,6 +96,8 @@ class Airalo {
   }
 
   async getGlobalPackages(flat = false, limit = null, page = null) {
+    this._isInitialised();
+
     return this.services.packages.getPackages({
       flat,
       limit,
@@ -90,6 +107,8 @@ class Airalo {
   }
 
   async getCountryPackages(countryCode, flat = false, limit = null) {
+    this._isInitialised();
+
     return this.services.packages.getPackages({
       flat,
       limit,
@@ -98,6 +117,8 @@ class Airalo {
   }
 
   async topup(packageId, iccid, description = "Topup placed from Nodejs SDK") {
+    this._isInitialised();
+
     return this.services.topup.createTopup({
       package_id: packageId,
       iccid,
@@ -107,6 +128,8 @@ class Airalo {
 
   // Order convenience methods
   async order(packageId, quantity, description = null) {
+    this._isInitialised();
+
     return this.services.order.createOrder({
       package_id: packageId,
       quantity,
@@ -121,6 +144,8 @@ class Airalo {
     esimCloud,
     description = null,
   ) {
+    this._isInitialised();
+
     return this.services.order.createOrderWithEmailSimShare(
       {
         package_id: packageId,
@@ -133,6 +158,8 @@ class Airalo {
   }
 
   async orderAsync(packageId, quantity, webhookUrl = null, description = null) {
+    this._isInitialised();
+
     return this.services.order.createOrderAsync({
       package_id: packageId,
       quantity,
@@ -143,6 +170,8 @@ class Airalo {
   }
 
   async orderBulk(packages, description = null) {
+    this._isInitialised();
+
     if (!packages || Object.keys(packages).length === 0) {
       return null;
     }
@@ -150,6 +179,8 @@ class Airalo {
   }
 
   async orderBulkWithEmailSimShare(packages, esimCloud, description = null) {
+    this._isInitialised();
+
     if (!packages || Object.keys(packages).length === 0) {
       return null;
     }
@@ -161,6 +192,8 @@ class Airalo {
   }
 
   async orderAsyncBulk(packages, webhookUrl = null, description = null) {
+    this._isInitialised();
+
     if (!packages || Object.keys(packages).length === 0) {
       return null;
     }
@@ -172,19 +205,61 @@ class Airalo {
   }
 
   async getSimUsage(iccid) {
+    this._isInitialised();
+
     return this.services.sims.simUsage({ iccid });
   }
 
   async getSimUsageBulk(iccids) {
+    this._isInitialised();
+
     return this.services.sims.simUsageBulk(iccids);
   }
 
   async getSimTopups(iccid) {
+    this._isInitialised();
+
     return this.services.sims.simTopups({ iccid });
   }
 
   async getSimPackageHistory(iccid) {
+    this._isInitialised();
+
     return this.services.sims.simPackageHistory({ iccid });
+  }
+
+  async voucher(
+    usageLimit,
+    amount,
+    quantity,
+    isPaid = false,
+    voucherCode = null,
+  ) {
+    this._isInitialised();
+
+    return this.services.vouchers.createVoucher({
+      voucher_code: voucherCode,
+      usage_limit: usageLimit,
+      amount,
+      quantity,
+      is_paid: isPaid,
+    });
+  }
+
+  async esimVouchers(payload) {
+    this._isInitialised();
+
+    return this.services.vouchers.createEsimVoucher({
+      vouchers: payload?.vouchers,
+    });
+  }
+
+  _isInitialised() {
+    if (!this.initCalled) {
+      throw new AiraloException(
+        "Airalo SDK not initialized. Please call initialize() method first.",
+      );
+    }
   }
 }
 

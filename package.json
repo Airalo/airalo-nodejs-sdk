@@ -1,7 +1,7 @@
 {
   "name": "airalo-sdk",
   "version": "1.0.0",
-  "description": "Airalo's Partner API NodeJS SDK",
+  "description": "The Official Airalo Partner API NodeJS SDK",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,7 +12,16 @@
     "url": "git+https://github.com/Airalo/airalo-nodejs-sdk.git"
   },
   "keywords": [
-    "Airalo"
+    "Airalo",
+    "esim",
+		"sim",
+		"e-sim",
+		"airalo",
+		"airalo-api",
+		"airalo-esim",
+		"airalo-sim",
+		"airalo-e-sim",
+		"airalo-partner-api"
   ],
   "author": "Airalo PX Gamma Team",
   "license": "ISC",
