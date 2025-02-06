@@ -13,6 +13,8 @@ const API_CONSTANTS = {
     SIMS_TOPUPS: "topups",
     SIMS_PACKAGES: "packages",
     TOPUPS_SLUG: "orders/topups",
+    VOUCHERS_SLUG: "voucher/airmoney",
+    VOUCHERS_ESIM_SLUG: "voucher/esim",
   },
 };
 

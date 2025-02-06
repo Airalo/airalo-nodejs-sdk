@@ -56,16 +56,6 @@ class HttpClient {
       const req = https.request(requestOptions, (res) => {
         let data = "";
 
-        this.code = res.statusCode;
-
-        if (this.code > 204) {
-          reject(
-            new AiraloException(
-              `Request failed with status code: ${this.code}`,
-            ),
-          );
-        }
-
         this.header = res.rawHeaders.join("\r\n");
 
         res.on("data", (chunk) => (data += chunk));
@@ -77,6 +67,14 @@ class HttpClient {
 
           try {
             const response = JSON.parse(data);
+
+            if (res.statusCode > 204) {
+              reject(
+                new AiraloException(
+                  `Request failed with status code: ${res.statusCode}, response: ${data}`,
+                ),
+              );
+            }
             resolve(response);
           } catch (error) {
             reject(

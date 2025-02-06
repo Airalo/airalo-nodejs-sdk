@@ -26,12 +26,6 @@ class OrderService {
         payload,
       );
 
-    if (this.httpClient.code !== 200) {
-      throw new AiraloException(
-        `Order creation failed, status code: ${this.httpClient.code}, response: ${JSON.stringify(response)}`,
-      );
-    }
-
     return response;
   }
 
@@ -56,12 +50,6 @@ class OrderService {
         orderPayload,
       );
 
-    if (this.httpClient.code !== 200) {
-      throw new AiraloException(
-        `Order creation failed, status code: ${this.httpClient.code}, response: ${JSON.stringify(response)}`,
-      );
-    }
-
     return response;
   }
 
@@ -74,12 +62,6 @@ class OrderService {
         `${this.config.getUrl()}${API_CONSTANTS.ENDPOINTS.ASYNC_ORDERS_SLUG}`,
         payload,
       );
-
-    if (this.httpClient.code !== 202) {
-      throw new AiraloException(
-        `Order creation failed, status code: ${this.httpClient.code}, response: ${JSON.stringify(response)}`,
-      );
-    }
 
     return response;
   }
