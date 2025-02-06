@@ -11,7 +11,11 @@ export default [
       ecmaVersion: 2023,
       globals: {
         ...globals.node,
+        ...globals.jest, // Add Jest globals
       },
+    },
+    plugins: {
+      jest: {}, // Add the Jest plugin with an empty options object
     },
     rules: {
       // Possible Problems
