@@ -1,10 +1,9 @@
-name: ESLint & Tests
+name: Airalo Node.js SDK CI/CD
 
 on:
   push:
     branches:
       - "main"
-      - "feature/APIP-1057"
   pull_request:
     branches:
       - "main"
