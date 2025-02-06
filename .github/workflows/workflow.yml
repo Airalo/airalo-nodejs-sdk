@@ -10,8 +10,8 @@ on:
       - "main"
 
 jobs:
-  eslint:
-    name: Run ESLint checks
+  eslint_and_tests:
+    name: Run ESLint checks & Run tests
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -31,22 +31,6 @@ jobs:
       - name: Run ESLint
         run: npm run lint
         continue-on-error: false
-
-  test:
-    name: Run Tests
-    needs: eslint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-
-      - name: Install dependencies
-        run: npm install
 
       - name: Run tests
         run: npm run test
