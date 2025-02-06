@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "main"
+      - "feature/APIP-1057"
   pull_request:
     branches:
       - "main"
