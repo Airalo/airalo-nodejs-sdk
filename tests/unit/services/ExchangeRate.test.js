@@ -115,19 +115,19 @@ describe("ExchangeRateService", () => {
         exchangeRateService.exchangeRates({
           date: "2024/02/07",
         }),
-      ).rejects.toThrow("Please enter a valid date in the format YYYY-MM-DD");
+      ).rejects.toThrow(/^Please enter a valid date in the format YYYY-MM-DD$/);
 
       await expect(
         exchangeRateService.exchangeRates({
           date: "20240207",
         }),
-      ).rejects.toThrow("Please enter a valid date in the format YYYY-MM-DD");
+      ).rejects.toThrow(/^Please enter a valid date in the format YYYY-MM-DD$/);
 
       await expect(
         exchangeRateService.exchangeRates({
           date: "2024-2-7",
         }),
-      ).rejects.toThrow("Please enter a valid date in the format YYYY-MM-DD");
+      ).rejects.toThrow(/^Please enter a valid date in the format YYYY-MM-DD$/);
     });
 
     test("should validate currency code format", async () => {
@@ -136,7 +136,7 @@ describe("ExchangeRateService", () => {
           to: "EURO",
         }),
       ).rejects.toThrow(
-        "Please enter a comma separated list of currency codes. Each code must have 3 letters",
+          /^Please enter a comma separated list of currency codes. Each code must have 3 letters$/,
       );
 
       await expect(
@@ -144,7 +144,7 @@ describe("ExchangeRateService", () => {
           to: "EU",
         }),
       ).rejects.toThrow(
-        "Please enter a comma separated list of currency codes. Each code must have 3 letters",
+        /^Please enter a comma separated list of currency codes. Each code must have 3 letters$/,
       );
 
       await expect(
@@ -152,7 +152,7 @@ describe("ExchangeRateService", () => {
           to: "EUR,GB",
         }),
       ).rejects.toThrow(
-        "Please enter a comma separated list of currency codes. Each code must have 3 letters",
+        /^Please enter a comma separated list of currency codes. Each code must have 3 letters$/,
       );
     });
 
@@ -232,13 +232,13 @@ describe("ExchangeRateService", () => {
 
     test("should handle validation through Airalo instance", async () => {
       await expect(airalo.getExchangeRates("2024/02/07")).rejects.toThrow(
-        "Please enter a valid date in the format YYYY-MM-DD",
+        /^Please enter a valid date in the format YYYY-MM-DD$/,
       );
 
       await expect(
         airalo.getExchangeRates(null, null, null, "EURO"),
       ).rejects.toThrow(
-        "Please enter a comma separated list of currency codes. Each code must have 3 letters",
+        /^Please enter a comma separated list of currency codes. Each code must have 3 letters$/,
       );
     });
   });
@@ -274,13 +274,13 @@ describe("ExchangeRateService", () => {
 
     test("should handle validation through AiraloStatic", async () => {
       await expect(AiraloStatic.getExchangeRates("2024/02/07")).rejects.toThrow(
-        "Please enter a valid date in the format YYYY-MM-DD",
+        /^Please enter a valid date in the format YYYY-MM-DD$/,
       );
 
       await expect(
         AiraloStatic.getExchangeRates(null, null, null, "EURO"),
       ).rejects.toThrow(
-        "Please enter a comma separated list of currency codes",
+        /^Please enter a comma separated list of currency codes. Each code must have 3 letters$/,
       );
     });
   });
@@ -317,7 +317,7 @@ describe("ExchangeRateService", () => {
     test("should require access token", () => {
       expect(
         () => new ExchangeRateService(mockConfig, mockHttpClient, null),
-      ).toThrow("Invalid access token");
+      ).toThrow(/^Invalid access token please check your credentials$/);
     });
 
     test("should handle API errors", async () => {
@@ -325,7 +325,7 @@ describe("ExchangeRateService", () => {
 
       await expect(
         exchangeRateService.exchangeRates({ to: "EUR" }),
-      ).rejects.toThrow("API Error");
+      ).rejects.toThrow(/^API Error$/);
     });
 
     test("should require initialization", async () => {
@@ -336,12 +336,11 @@ describe("ExchangeRateService", () => {
       });
 
       await expect(uninitializedAiralo.getExchangeRates()).rejects.toThrow(
-        "not initialized",
-      );
+          /^Airalo SDK not initialized. Please call initialize\(\) method first.$/);
 
       AiraloStatic.pool = {};
       await expect(AiraloStatic.getExchangeRates()).rejects.toThrow(
-        "not initialized",
+        /^Airalo SDK is not initialized, please call static method init\(\) first$/,
       );
     });
   });
