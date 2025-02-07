@@ -13,26 +13,7 @@ class Config {
   ];
 
   constructor(data) {
-    if (!data) {
-      throw new AiraloException("Config data is not provided");
-    }
-
-    try {
-      this.data =
-        typeof data !== "object" ? JSON.parse(JSON.stringify(data)) : data;
-    } catch (error) {
-      throw new AiraloException(
-        `Invalid config data provided, error: ${error.message}`,
-      );
-    }
-
-    if (!this.data || Object.keys(this.data).length === 0) {
-      throw new AiraloException(
-        "Invalid config data provided, empty configuration",
-      );
-    }
-
-    this.validate();
+    this.validate(data);
   }
 
   get(key, defaultValue = null) {
@@ -66,7 +47,26 @@ class Config {
     return [...Config.DEFAULT_HEADERS, ...(this.data.http_headers ?? [])];
   }
 
-  validate() {
+  validate(data) {
+    if (!data) {
+      throw new AiraloException("Config data is not provided");
+    }
+
+    try {
+      this.data =
+        typeof data !== "object" ? JSON.parse(JSON.stringify(data)) : data;
+    } catch (error) {
+      throw new AiraloException(
+        `Invalid config data provided, error: ${error.message}`,
+      );
+    }
+
+    if (!this.data || Object.keys(this.data).length === 0) {
+      throw new AiraloException(
+        "Invalid config data provided, empty configuration",
+      );
+    }
+
     const configKeys = Object.keys(this.data);
 
     for (const key of Config.MANDATORY_CONFIG_KEYS) {
