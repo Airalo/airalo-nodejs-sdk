@@ -7,6 +7,7 @@ const TopupService = require("./services/TopupService");
 const Signature = require("./helpers/Signature");
 const SimService = require("./services/SimService");
 const VoucherService = require("./services/VoucherService");
+const ExchangeRateService = require("./services/ExchangeRateService");
 const AiraloException = require("./exceptions/AiraloException");
 
 class Airalo {
@@ -54,6 +55,11 @@ class Airalo {
       this.config,
       this.httpClient,
       this.signature,
+      this.token,
+    );
+    this.services.exchangeRates = new ExchangeRateService(
+      this.config,
+      this.httpClient,
       this.token,
     );
 
@@ -251,6 +257,15 @@ class Airalo {
 
     return this.services.vouchers.createEsimVoucher({
       vouchers: payload?.vouchers,
+    });
+  }
+
+  async getExchangeRates(date = null, source = null, from = null, to = null) {
+    return this.services.exchangeRates.exchangeRates({
+      date,
+      source,
+      from,
+      to
     });
   }
 

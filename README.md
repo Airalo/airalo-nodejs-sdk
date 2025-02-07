@@ -691,6 +691,77 @@ Example response:
 }
 ```
 
+# Exchange Rates
+
+### Get Exchange Rates
+```javascript
+async function getExchangeRates(date = null, source = null, from = null, to = null)
+```
+
+Fetches exchange rates for the provided parameters:
+- `date`: Date in YYYY-MM-DD format (optional)
+- `source`: Always null
+- `from`: Always USD
+- `to`: Comma-separated list of currency codes to convert to (e.g., 'AUD,GBP,EUR')
+
+NOTE: This endpoint must be enabled before you can use it.
+ 
+Example:
+```javascript
+const { Airalo } = require('airalo-sdk');
+
+const airalo = new Airalo({
+    client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
+    client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
+    env: 'sandbox',                                 // optional, defaults to `production`
+});
+
+// Must initialize before using
+await airalo.initialize();
+const rates = await airalo.getExchangeRates('2025-01-30', null, null, 'AUD,GBP,EUR');
+
+//
+// Static usage
+//
+const { Airalo } = require('airalo-sdk');
+
+await AiraloStatic.init({
+    client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
+    client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
+    env: 'sandbox',                                 // optional, defaults to `production`
+});
+
+const rates = await AiraloStatic.getExchangeRates('2025-01-30', null, null, 'AUD,GBP,EUR');
+```
+
+Example Response:
+```json
+{
+  "data": {
+    "date": "2025-01-30",
+    "rates": [
+      {
+        "from": "USD",
+        "mid": "1.6059162",
+        "to": "AUD"
+      },
+      {
+        "from": "USD",
+        "mid": "0.80433592",
+        "to": "GBP"
+      },
+      {
+        "from": "USD",
+        "mid": "0.96191527",
+        "to": "EUR"
+      }
+    ]
+  },
+  "meta": {
+    "message": "success"
+  }
+}
+```
 
 # Technical notes
 - Encrypted auth tokens are automatically cached in filesystem for 24h

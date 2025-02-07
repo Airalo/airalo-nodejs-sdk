@@ -8,6 +8,7 @@ const TopupService = require("./services/TopupService");
 const AiraloException = require("./exceptions/AiraloException");
 const SimService = require("./services/SimService");
 const VoucherService = require("./services/VoucherService");
+const ExchangeRateService = require("./services/ExchangeRateService");
 
 class AiraloStatic {
   static pool = {};
@@ -17,10 +18,10 @@ class AiraloStatic {
   static oauth;
   static packagesService;
   static orderService;
-  static packages;
   static topupService;
   static simService;
   static voucherService;
+  static exchangeRateService;
 
   static async init(config) {
     try {
@@ -234,11 +235,20 @@ class AiraloStatic {
     });
   }
 
+  static async getExchangeRates(date = null, source = null, from = null, to = null) {
+    this.checkInitialized();
+    return this.exchangeRateService.exchangeRates({
+      date,
+      source,
+      from,
+      to
+    });
+  }
+
   static async initResources(config) {
     this.config = this.pool["config"] ?? new Config(config);
     this.httpClient = this.pool["httpClient"] ?? new HttpClient(this.config);
-    this.signature =
-      this.pool["signature"] ?? new Signature(this.config.get("client_secret"));
+    this.signature = this.pool["signature"] ?? new Signature(this.config.get("client_secret"));
   }
 
   static async initServices() {
@@ -247,31 +257,27 @@ class AiraloStatic {
       new OAuthService(this.config, this.httpClient, this.signature);
     const token = await this.oauth.getAccessToken();
 
-    this.packages =
-      this.pool["packages"] ??
-      new PackagesService(this.config, this.httpClient, token);
     this.orderService =
       this.pool["orderService"] ??
       new OrderService(this.config, this.httpClient, this.signature, token);
-    this.sim =
-      this.pool["sims"] ?? new SimService(this.config, this.httpClient, token);
     this.topupService =
-      this.pool["packages"] ??
+      this.pool["topupService"] ??
       new TopupService(this.config, this.httpClient, this.signature, token);
     this.voucherService =
       this.pool["voucherService"] ??
       new VoucherService(this.config, this.httpClient, this.signature, token);
     this.packagesService =
-      this.pool["packages"] ??
+      this.pool["packagesService"] ??
       new PackagesService(this.config, this.httpClient, token);
     this.orderService =
-      this.pool["order"] ??
+      this.pool["orderService"] ??
       new OrderService(this.config, this.httpClient, this.signature, token);
     this.simService =
-      this.pool["sims"] ?? new SimService(this.config, this.httpClient, token);
-    this.topupService =
-      this.pool["packages"] ??
-      new TopupService(this.config, this.httpClient, this.signature, token);
+      this.pool["simService"] ??
+        new SimService(this.config, this.httpClient, token);
+    this.exchangeRateService =
+      this.pool["exchangeRateService"] ??
+      new ExchangeRateService(this.config, this.httpClient, token);
   }
 
   static checkInitialized() {
