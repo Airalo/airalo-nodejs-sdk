@@ -261,6 +261,7 @@ class Airalo {
   }
 
   async getExchangeRates(date = null, source = null, from = null, to = null) {
+    this._isInitialised();
     return this.services.exchangeRates.exchangeRates({
       date,
       source,
