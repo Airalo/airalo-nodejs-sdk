@@ -33,7 +33,7 @@ class PackagesService {
               .setHeaders([`Authorization: Bearer ${this.accessToken}`])
               .get(pageUrl);
 
-            if (!response?.data) {
+            if (!response?.data || response.data.length === 0) {
               break;
             }
 
