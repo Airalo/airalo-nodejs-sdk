@@ -136,7 +136,7 @@ describe("ExchangeRateService", () => {
           to: "EURO",
         }),
       ).rejects.toThrow(
-          /^Please enter a comma separated list of currency codes. Each code must have 3 letters$/,
+        /^Please enter a comma separated list of currency codes. Each code must have 3 letters$/,
       );
 
       await expect(
@@ -336,7 +336,8 @@ describe("ExchangeRateService", () => {
       });
 
       await expect(uninitializedAiralo.getExchangeRates()).rejects.toThrow(
-          /^Airalo SDK not initialized. Please call initialize\(\) method first.$/);
+        /^Airalo SDK not initialized. Please call initialize\(\) method first.$/,
+      );
 
       AiraloStatic.pool = {};
       await expect(AiraloStatic.getExchangeRates()).rejects.toThrow(
