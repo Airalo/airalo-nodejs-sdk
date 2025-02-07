@@ -368,6 +368,30 @@ declare module 'airalo-sdk' {
         ): Promise<Record<string, AsyncOrderResponse>>;
     }
 
+    export interface ExchangeRateResponse {
+        data: {
+            date: string;
+            rates: Array<{
+                from: string;
+                mid: string;
+                to: string;
+            }>;
+        };
+        meta: {
+            message: string;
+        };
+    }
+
+    export class ExchangeRatesService {
+        constructor(config: AiraloConfig, httpClient: HttpClient, accessToken: string);
+        exchangeRates(params?: {
+            date?: string | null;
+            source?: string | null;
+            from?: string | null;
+            to?: string | null;
+        }): Promise<ExchangeRateResponse | null>;
+    }
+
     export default class Airalo {
         constructor(config: AiraloConfig);
         initialize(): Promise<this>;
@@ -413,6 +437,13 @@ declare module 'airalo-sdk' {
         ): Promise<VoucherResponse | null>;
 
         esimVouchers(payload: { vouchers: EsimVoucherInput[] }): Promise<EsimVouchersResponse | null>;
+
+        getExchangeRates(
+            date?: string | null,
+            source?: string | null,
+            from?: string | null,
+            to?: string | null
+        ): Promise<ExchangeRateResponse | null>;
     }
 
     export class AiraloStatic {
@@ -453,5 +484,12 @@ declare module 'airalo-sdk' {
         ): Promise<VoucherResponse | null>;
 
         static esimVouchers(payload: { vouchers: EsimVoucherInput[] }): Promise<EsimVouchersResponse | null>;
+
+        static getExchangeRates(
+            date?: string | null,
+            source?: string | null,
+            from?: string | null,
+            to?: string | null
+        ): Promise<ExchangeRateResponse | null>;
     }
 }
