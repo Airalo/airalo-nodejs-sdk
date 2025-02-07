@@ -15,7 +15,7 @@ const API_CONSTANTS = {
     TOPUPS_SLUG: "orders/topups",
     VOUCHERS_SLUG: "voucher/airmoney",
     VOUCHERS_ESIM_SLUG: "voucher/esim",
-    EXCHANGE_RATES_SLUG: 'finance/exchange-rates'
+    EXCHANGE_RATES_SLUG: "finance/exchange-rates",
   },
 };
 

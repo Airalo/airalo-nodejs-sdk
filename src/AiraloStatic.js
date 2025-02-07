@@ -235,20 +235,26 @@ class AiraloStatic {
     });
   }
 
-  static async getExchangeRates(date = null, source = null, from = null, to = null) {
+  static async getExchangeRates(
+    date = null,
+    source = null,
+    from = null,
+    to = null,
+  ) {
     this.checkInitialized();
     return this.exchangeRateService.exchangeRates({
       date,
       source,
       from,
-      to
+      to,
     });
   }
 
   static async initResources(config) {
     this.config = this.pool["config"] ?? new Config(config);
     this.httpClient = this.pool["httpClient"] ?? new HttpClient(this.config);
-    this.signature = this.pool["signature"] ?? new Signature(this.config.get("client_secret"));
+    this.signature =
+      this.pool["signature"] ?? new Signature(this.config.get("client_secret"));
   }
 
   static async initServices() {
@@ -274,7 +280,7 @@ class AiraloStatic {
       new OrderService(this.config, this.httpClient, this.signature, token);
     this.simService =
       this.pool["simService"] ??
-        new SimService(this.config, this.httpClient, token);
+      new SimService(this.config, this.httpClient, token);
     this.exchangeRateService =
       this.pool["exchangeRateService"] ??
       new ExchangeRateService(this.config, this.httpClient, token);

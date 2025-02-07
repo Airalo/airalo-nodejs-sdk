@@ -265,7 +265,7 @@ class Airalo {
       date,
       source,
       from,
-      to
+      to,
     });
   }
 
