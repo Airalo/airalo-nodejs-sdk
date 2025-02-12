@@ -1,6 +1,6 @@
 {
   "name": "airalo-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Official Airalo Partner API NodeJS SDK",
   "main": "index.js",
   "scripts": {
