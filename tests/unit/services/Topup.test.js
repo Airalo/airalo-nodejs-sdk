@@ -43,10 +43,10 @@ describe("TopupService", () => {
     };
 
     topupService = new TopupService(
-        mockConfig,
-        mockHttpClient,
-        mockSignature,
-        "test-token",
+      mockConfig,
+      mockHttpClient,
+      mockSignature,
+      "test-token",
     );
 
     // Initialize Airalo instance
@@ -88,17 +88,17 @@ describe("TopupService", () => {
 
   test("should require package_id", async () => {
     await expect(
-        topupService.createTopup({
-          iccid: validIccid,
-        }),
+      topupService.createTopup({
+        iccid: validIccid,
+      }),
     ).rejects.toThrow(/package_id.*required/);
   });
 
   test("should require iccid", async () => {
     await expect(
-        topupService.createTopup({
-          package_id: "pkg1",
-        }),
+      topupService.createTopup({
+        package_id: "pkg1",
+      }),
     ).rejects.toThrow(/iccid.*required/);
   });
 
@@ -137,16 +137,16 @@ describe("TopupService", () => {
     mockHttpClient.post.mockRejectedValueOnce(new Error("API Error"));
 
     await expect(
-        topupService.createTopup({
-          package_id: "pkg1",
-          iccid: validIccid,
-        }),
+      topupService.createTopup({
+        package_id: "pkg1",
+        iccid: validIccid,
+      }),
     ).rejects.toThrow("API Error");
   });
 
   test("should require access token", () => {
     expect(
-        () => new TopupService(mockConfig, mockHttpClient, mockSignature, null),
+      () => new TopupService(mockConfig, mockHttpClient, mockSignature, null),
     ).toThrow("Invalid access token");
   });
 
@@ -160,7 +160,7 @@ describe("TopupService", () => {
 
     expect(mockSignature.getSignature).toHaveBeenCalledWith(payload);
     expect(mockHttpClient.setHeaders).toHaveBeenCalledWith(
-        expect.arrayContaining([expect.stringMatching(/^airalo-signature: .+/)]),
+      expect.arrayContaining([expect.stringMatching(/^airalo-signature: .+/)]),
     );
   });
 });
