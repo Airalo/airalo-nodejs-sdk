@@ -18,7 +18,7 @@ Install the Airalo SDK using npm:
 
 OR
 
-Install the Airalo SDK using npm: `yarn add airalo-sdk`
+Install the Airalo SDK using yarn: `yarn add airalo-sdk`
 
 # Initialization
 The SDK provides two ways to interact with the API:
