@@ -268,6 +268,7 @@ class Airalo {
 
   async getExchangeRates(date = null, source = null, from = null, to = null) {
     this._isInitialised();
+
     return this.services.exchangeRates.exchangeRates({
       date,
       source,
@@ -277,6 +278,8 @@ class Airalo {
   }
 
   async getSimInstructions(iccid, language = "en") {
+    this._isInitialised();
+
     return this.services.instruction.getInstructions({
       iccid,
       language,
