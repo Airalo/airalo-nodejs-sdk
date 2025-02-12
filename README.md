@@ -780,7 +780,7 @@ const airalo = new Airalo({
 
 // Must initialize before using
 await airalo.initialize();
-const rates = await airalo.getSimInstructions('893000000000002115');
+const instructions = await airalo.getSimInstructions('893000000000002115');
 
 //
 // Static usage
@@ -793,7 +793,7 @@ await AiraloStatic.init({
     env: 'sandbox',                                 // optional, defaults to `production`
 });
 
-const rates = await AiraloStatic.getSimInstructions('893000000000002115');
+const instructions = await AiraloStatic.getSimInstructions('893000000000002115');
 ```
 Example response:<br>
 ```json
