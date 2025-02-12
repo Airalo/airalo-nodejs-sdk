@@ -205,7 +205,7 @@ class AiraloStatic {
   ) {
     this.checkInitialized();
     return this.topupService.createTopup({
-      packageId,
+      package_id: packageId,
       iccid,
       description,
     });
