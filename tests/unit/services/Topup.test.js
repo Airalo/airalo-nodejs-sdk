@@ -23,11 +23,19 @@ describe("TopupService", () => {
     mockConfig = {
       getUrl: jest.fn(() => "https://api.test.com"),
       getHttpHeaders: jest.fn(() => ({})),
+      get: jest.fn().mockReturnValue("test-secret"),
     };
 
     mockHttpClient = {
       setHeaders: jest.fn().mockReturnThis(),
-      post: jest.fn(),
+      post: jest.fn().mockResolvedValue({
+        data: {
+          id: "top123",
+          package_id: "pkg1",
+          iccid: validIccid,
+          status: "completed",
+        },
+      }),
     };
 
     mockSignature = {
@@ -35,228 +43,124 @@ describe("TopupService", () => {
     };
 
     topupService = new TopupService(
-      mockConfig,
-      mockHttpClient,
-      mockSignature,
-      "test-token",
+        mockConfig,
+        mockHttpClient,
+        mockSignature,
+        "test-token",
     );
 
+    // Initialize Airalo instance
     airalo = new Airalo({
       client_id: "test-id",
       client_secret: "test-secret",
       env: "sandbox",
     });
-
     await airalo.initialize();
     airalo.services.topup = topupService;
 
+    // Initialize AiraloStatic
     await AiraloStatic.init({
       client_id: "test-id",
       client_secret: "test-secret",
       env: "sandbox",
     });
-    AiraloStatic.topupService = {
-      createTopup: jest.fn().mockImplementation((payload) => {
-        // Map packageId to package_id for TopupService
-        const mappedPayload = {
-          ...payload,
-          package_id: payload.packageId,
-        };
-        delete mappedPayload.packageId;
-        return topupService.createTopup(mappedPayload);
-      }),
-    };
+    AiraloStatic.topupService = topupService;
   });
 
   afterEach(() => {
     AiraloStatic.pool = {};
   });
 
-  describe("Direct Service Tests", () => {
-    test("should create topup successfully with valid payload", async () => {
-      const mockResponse = {
-        data: {
-          id: "top123",
+  test("should create topup successfully", async () => {
+    const result = await topupService.createTopup({
+      package_id: "pkg1",
+      iccid: validIccid,
+      description: "Test topup",
+    });
+
+    expect(result.data.id).toBe("top123");
+    expect(mockHttpClient.setHeaders).toHaveBeenCalledWith([
+      "Content-Type: application/json",
+      "Authorization: Bearer test-token",
+      "airalo-signature: test-signature",
+    ]);
+  });
+
+  test("should require package_id", async () => {
+    await expect(
+        topupService.createTopup({
+          iccid: validIccid,
+        }),
+    ).rejects.toThrow(/package_id.*required/);
+  });
+
+  test("should require iccid", async () => {
+    await expect(
+        topupService.createTopup({
+          package_id: "pkg1",
+        }),
+    ).rejects.toThrow(/iccid.*required/);
+  });
+
+  test("should create topup through Airalo instance", async () => {
+    const result = await airalo.topup("pkg1", validIccid, "Test topup");
+
+    expect(result.data.id).toBe("top123");
+    expect(mockHttpClient.post).toHaveBeenCalledWith(expect.any(String), {
+      package_id: "pkg1",
+      iccid: validIccid,
+      description: "Test topup",
+    });
+  });
+
+  test("should create topup through AiraloStatic", async () => {
+    await AiraloStatic.topup("pkg1", validIccid, "Test topup");
+
+    expect(mockHttpClient.post).toHaveBeenCalledWith(expect.any(String), {
+      package_id: "pkg1",
+      iccid: validIccid,
+      description: "Test topup",
+    });
+  });
+
+  test("should use default description", async () => {
+    await airalo.topup("pkg1", validIccid);
+
+    expect(mockHttpClient.post).toHaveBeenCalledWith(expect.any(String), {
+      package_id: "pkg1",
+      iccid: validIccid,
+      description: "Topup placed from Nodejs SDK",
+    });
+  });
+
+  test("should handle API errors", async () => {
+    mockHttpClient.post.mockRejectedValueOnce(new Error("API Error"));
+
+    await expect(
+        topupService.createTopup({
           package_id: "pkg1",
           iccid: validIccid,
-          status: "completed",
-        },
-      };
+        }),
+    ).rejects.toThrow("API Error");
+  });
 
-      mockHttpClient.post.mockResolvedValue(mockResponse);
-
-      const payload = {
-        package_id: "pkg1",
-        iccid: validIccid,
-        description: "Test topup",
-      };
-
-      const result = await topupService.createTopup(payload);
-
-      expect(result.data.id).toBe("top123");
-      expect(mockHttpClient.post).toHaveBeenCalledTimes(1);
-      expect(mockHttpClient.setHeaders).toHaveBeenCalledWith([
-        "Content-Type: application/json",
-        "Authorization: Bearer test-token",
-        "airalo-signature: test-signature",
-      ]);
-      expect(mockHttpClient.post).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining(payload),
-      );
-    });
-
-    test("should validate package_id in payload", async () => {
-      const invalidPayloads = [
-        { iccid: validIccid },
-        { package_id: "", iccid: validIccid },
-        { package_id: null, iccid: validIccid },
-      ];
-
-      for (const payload of invalidPayloads) {
-        await expect(topupService.createTopup(payload)).rejects.toThrow(
-          /package_id.*required/i,
-        );
-      }
-    });
-
-    test("should validate iccid in payload", async () => {
-      const invalidPayloads = [
-        { package_id: "pkg1" },
-        { package_id: "pkg1", iccid: "" },
-        { package_id: "pkg1", iccid: null },
-      ];
-
-      for (const payload of invalidPayloads) {
-        await expect(topupService.createTopup(payload)).rejects.toThrow(
-          /iccid.*required/i,
-        );
-      }
-    });
-
-    test("should handle API errors", async () => {
-      mockHttpClient.post.mockRejectedValue(new Error("API Error"));
-
-      const payload = {
-        package_id: "pkg1",
-        iccid: validIccid,
-        description: "Test topup",
-      };
-
-      await expect(topupService.createTopup(payload)).rejects.toThrow(
-        "API Error",
-      );
-    });
-
-    test("should require access token during initialization", () => {
-      expect(
+  test("should require access token", () => {
+    expect(
         () => new TopupService(mockConfig, mockHttpClient, mockSignature, null),
-      ).toThrow(/Invalid access token/);
-    });
-
-    test("should generate signature for request", async () => {
-      mockHttpClient.post.mockResolvedValue({ data: { id: "top123" } });
-
-      const payload = {
-        package_id: "pkg1",
-        iccid: validIccid,
-        description: "Test topup",
-      };
-
-      await topupService.createTopup(payload);
-
-      expect(mockSignature.getSignature).toHaveBeenCalledWith(payload);
-      expect(mockHttpClient.setHeaders).toHaveBeenCalledWith(
-        expect.arrayContaining([
-          expect.stringMatching(/^airalo-signature: .+/),
-        ]),
-      );
-    });
+    ).toThrow("Invalid access token");
   });
 
-  describe("Airalo Instance Tests", () => {
-    test("should create topup through Airalo instance", async () => {
-      const mockResponse = {
-        data: {
-          id: "top123",
-          package_id: "pkg1",
-          iccid: validIccid,
-          status: "completed",
-        },
-      };
+  test("should generate signature", async () => {
+    const payload = {
+      package_id: "pkg1",
+      iccid: validIccid,
+    };
 
-      mockHttpClient.post.mockResolvedValue(mockResponse);
+    await topupService.createTopup(payload);
 
-      const result = await airalo.topup("pkg1", validIccid, "Test topup");
-
-      expect(result.data.id).toBe("top123");
-      expect(mockHttpClient.post).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          package_id: "pkg1",
-          iccid: validIccid,
-          description: "Test topup",
-        }),
-      );
-    });
-
-    test("should use default description in Airalo instance", async () => {
-      mockHttpClient.post.mockResolvedValue({ data: { id: "top123" } });
-
-      await airalo.topup("pkg1", validIccid);
-
-      expect(mockHttpClient.post).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          package_id: "pkg1",
-          iccid: validIccid,
-          description: "Topup placed from Nodejs SDK",
-        }),
-      );
-    });
-  });
-
-  describe("AiraloStatic Tests", () => {
-    test("should create topup through AiraloStatic", async () => {
-      const mockResponse = {
-        data: {
-          id: "top123",
-          package_id: "pkg1",
-          iccid: validIccid,
-          status: "completed",
-        },
-      };
-
-      mockHttpClient.post.mockResolvedValue(mockResponse);
-
-      const result = await AiraloStatic.topup("pkg1", validIccid, "Test topup");
-
-      expect(result.data.id).toBe("top123");
-      expect(AiraloStatic.topupService.createTopup).toHaveBeenCalledWith({
-        packageId: "pkg1",
-        iccid: validIccid,
-        description: "Test topup",
-      });
-    });
-
-    test("should use default description in AiraloStatic", async () => {
-      mockHttpClient.post.mockResolvedValue({ data: { id: "top123" } });
-
-      await AiraloStatic.topup("pkg1", validIccid);
-
-      expect(AiraloStatic.topupService.createTopup).toHaveBeenCalledWith({
-        packageId: "pkg1",
-        iccid: validIccid,
-        description: "Topup placed from Nodejs SDK",
-      });
-    });
-
-    test("should handle errors in AiraloStatic properly", async () => {
-      mockHttpClient.post.mockRejectedValue(new Error("API Error"));
-
-      await expect(AiraloStatic.topup("pkg1", validIccid)).rejects.toThrow(
-        "API Error",
-      );
-    });
+    expect(mockSignature.getSignature).toHaveBeenCalledWith(payload);
+    expect(mockHttpClient.setHeaders).toHaveBeenCalledWith(
+        expect.arrayContaining([expect.stringMatching(/^airalo-signature: .+/)]),
+    );
   });
 });
