@@ -8,6 +8,7 @@ const Signature = require("./helpers/Signature");
 const SimService = require("./services/SimService");
 const VoucherService = require("./services/VoucherService");
 const ExchangeRateService = require("./services/ExchangeRateService");
+const InstallationInstructionsService = require("./services/InstallationInstructionsService");
 const AiraloException = require("./exceptions/AiraloException");
 
 class Airalo {
@@ -58,6 +59,11 @@ class Airalo {
       this.token,
     );
     this.services.exchangeRates = new ExchangeRateService(
+      this.config,
+      this.httpClient,
+      this.token,
+    );
+    this.services.instruction = new InstallationInstructionsService(
       this.config,
       this.httpClient,
       this.token,
@@ -262,11 +268,21 @@ class Airalo {
 
   async getExchangeRates(date = null, source = null, from = null, to = null) {
     this._isInitialised();
+
     return this.services.exchangeRates.exchangeRates({
       date,
       source,
       from,
       to,
+    });
+  }
+
+  async getSimInstructions(iccid, language = "en") {
+    this._isInitialised();
+
+    return this.services.instruction.getInstructions({
+      iccid,
+      language,
     });
   }
 

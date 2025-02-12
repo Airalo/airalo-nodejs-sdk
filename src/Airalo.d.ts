@@ -392,6 +392,45 @@ declare module 'airalo-sdk' {
         }): Promise<ExchangeRateResponse | null>;
     }
 
+    export interface InstallationSteps {
+        steps: Record<string, string>;
+        qr_code_data?: string;
+        qr_code_url?: string;
+        smdp_address_and_activation_code?: string;
+        apn_type?: string;
+        apn_value?: string | null;
+        is_roaming?: boolean | null;
+    }
+
+    export interface DeviceInstructions {
+        model: string | null;
+        version: string | null;
+        installation_via_qr_code: InstallationSteps;
+        installation_manual: InstallationSteps;
+        network_setup: InstallationSteps;
+    }
+
+    export interface InstructionsResponse {
+        data: {
+            instructions: {
+                language: string;
+                ios: DeviceInstructions[];
+                android: DeviceInstructions[];
+            };
+        };
+        meta: {
+            message: string;
+        };
+    }
+
+    export class InstallationInstructionsService {
+        constructor(config: AiraloConfig, httpClient: HttpClient, accessToken: string);
+        getInstructions(params: {
+            iccid: string;
+            language?: string;
+        }): Promise<InstructionsResponse | null>;
+    }
+
     export default class Airalo {
         constructor(config: AiraloConfig);
         initialize(): Promise<this>;
@@ -444,6 +483,8 @@ declare module 'airalo-sdk' {
             from?: string | null,
             to?: string | null
         ): Promise<ExchangeRateResponse | null>;
+
+        getSimInstructions(iccid: string, language?: string): Promise<InstructionsResponse | null>;
     }
 
     export class AiraloStatic {
@@ -491,5 +532,7 @@ declare module 'airalo-sdk' {
             from?: string | null,
             to?: string | null
         ): Promise<ExchangeRateResponse | null>;
+
+        static getSimInstructions(iccid: string, language?: string): Promise<InstructionsResponse | null>;
     }
 }

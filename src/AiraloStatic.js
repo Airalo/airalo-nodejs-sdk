@@ -9,6 +9,7 @@ const AiraloException = require("./exceptions/AiraloException");
 const SimService = require("./services/SimService");
 const VoucherService = require("./services/VoucherService");
 const ExchangeRateService = require("./services/ExchangeRateService");
+const InstallationInstructionsService = require("./services/InstallationInstructionsService");
 
 class AiraloStatic {
   static pool = {};
@@ -22,6 +23,7 @@ class AiraloStatic {
   static simService;
   static voucherService;
   static exchangeRateService;
+  static installationInstructionsService;
 
   static async init(config) {
     try {
@@ -250,6 +252,14 @@ class AiraloStatic {
     });
   }
 
+  static async getSimInstructions(iccid, language = "en") {
+    this.checkInitialized();
+    return this.installationInstructionsService.getInstructions({
+      iccid,
+      language,
+    });
+  }
+
   static async initResources(config) {
     this.config = this.pool["config"] ?? new Config(config);
     this.httpClient = this.pool["httpClient"] ?? new HttpClient(this.config);
@@ -284,6 +294,9 @@ class AiraloStatic {
     this.exchangeRateService =
       this.pool["exchangeRateService"] ??
       new ExchangeRateService(this.config, this.httpClient, token);
+    this.installationInstructionsService =
+      this.pool["installationInstructionsService"] ??
+      new InstallationInstructionsService(this.config, this.httpClient, token);
   }
 
   static checkInitialized() {
