@@ -287,7 +287,7 @@ async orderWithEmailSimShare(packageId, quantity, esimCloud, description = null)
 ```
 
 Places an order for a given package id (fetched from any of the packages calls) and calls `order` endpoint of the REST API.<br>
-Accepts additional array $esimCloud with mandatory key `to_email` (a valid email address) belonging to an end user and `sharing_option` one of or both: ['link', 'pdf'] with optional list of `copy_address`.<br>
+Accepts additional array `esimCloud` with mandatory key `to_email` (a valid email address) belonging to an end user and `sharing_option` one of or both: ['link', 'pdf'] with optional list of `copy_address`.<br>
 The end user will receive an email with a link button (and pdf attachment if selected) with redirect to a fully managed eSIM page with installation instructions, usage checks.<br>
 This method is recommended if you do not intend to handle eSIM management for your users in your applications.<br>
 Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>

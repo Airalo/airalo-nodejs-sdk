@@ -1,6 +1,6 @@
 {
   "name": "airalo-sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The Official Airalo Partner API NodeJS SDK",
   "main": "index.js",
   "scripts": {
@@ -14,20 +14,20 @@
   "keywords": [
     "Airalo",
     "esim",
-		"sim",
-		"e-sim",
-		"airalo",
-		"airalo-api",
-		"airalo-esim",
-		"airalo-sim",
-		"airalo-e-sim",
-		"airalo-partner-api"
+    "sim",
+    "e-sim",
+    "airalo",
+    "airalo-api",
+    "airalo-esim",
+    "airalo-sim",
+    "airalo-e-sim",
+    "airalo-partner-api"
   ],
   "engines": {
     "node": ">=18.0.0"
   },
   "author": "Airalo PX Gamma Team",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Airalo/airalo-nodejs-sdk/issues"
   },
