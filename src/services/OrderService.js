@@ -1,4 +1,5 @@
 const AiraloException = require("../exceptions/AiraloException");
+const CloudSimShareValidator = require("../helpers/CloudSimShareValidator");
 const API_CONSTANTS = require("../constants/ApiConstants");
 const SDK_CONSTANTS = require("../constants/SdkConstants");
 
@@ -212,47 +213,10 @@ class OrderService {
   }
 
   validateCloudSimShare(simCloudShare) {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    if (
-      !simCloudShare.to_email ||
-      simCloudShare.to_email === "" ||
-      !emailRegex.test(simCloudShare.to_email)
-    ) {
-      throw new AiraloException(
-        `The to_email is required email address, payload: ${JSON.stringify(simCloudShare)}`,
-      );
-    }
-
-    if (
-      !simCloudShare.sharing_option ||
-      !Array.isArray(simCloudShare.sharing_option)
-    ) {
-      throw new AiraloException(
-        `The sharing_option is required array, payload: ${JSON.stringify(simCloudShare)}`,
-      );
-    }
-
-    for (const sharingOption of simCloudShare.sharing_option) {
-      if (!["link", "pdf"].includes(sharingOption)) {
-        throw new AiraloException(
-          `The sharing_option may be link or pdf or both, payload: ${JSON.stringify(simCloudShare)}`,
-        );
-      }
-    }
-
-    if (
-      simCloudShare.copy_address &&
-      Array.isArray(simCloudShare.copy_address)
-    ) {
-      for (const eachCCemail of simCloudShare.copy_address) {
-        if (!emailRegex.test(eachCCemail)) {
-          throw new AiraloException(
-            `The copy_address: ${eachCCemail} must be valid email address, payload: ${JSON.stringify(simCloudShare)}`,
-          );
-        }
-      }
-    }
+    CloudSimShareValidator.validate(simCloudShare, [
+      "to_email",
+      "sharing_option",
+    ]);
   }
 
   validateBulkOrder(payload) {
