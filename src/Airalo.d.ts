@@ -431,6 +431,51 @@ declare module 'airalo-sdk' {
         }): Promise<InstructionsResponse | null>;
     }
 
+    export interface FutureOrderPayload {
+        package_id: string;
+        quantity: number;
+        due_date: string; // in format "YYYY-MM-DD HH:mm"
+        webhook_url?: string | null;
+        description?: string | null;
+        brand_settings_name?: string | null;
+        to_email?: string | null;
+        sharing_option?: ('link' | 'pdf')[] | null;
+        copy_address?: string[] | null;
+    }
+
+    export interface CancelFutureOrderPayload {
+        request_ids: string[] | number[];
+    }
+
+    export interface FutureOrderResponse {
+        data: {
+            request_id: string;
+            accepted_at: string;
+            package_id: string;
+            quantity: number;
+            due_date: string;
+            status: string;
+        };
+        meta: {
+            message: string;
+        };
+    }
+
+    export interface CancelFutureOrderResponse {
+        data: {
+            cancelled_requests: string[] | number[];
+        };
+        meta: {
+            message: string;
+        };
+    }
+
+    export class FutureOrderService {
+        constructor(config: AiraloConfig, httpClient: HttpClient, signature: Signature, accessToken: string);
+        createFutureOrder(payload: FutureOrderPayload): Promise<FutureOrderResponse>;
+        cancelFutureOrder(payload: CancelFutureOrderPayload): Promise<CancelFutureOrderResponse>;
+    }
+
     export default class Airalo {
         constructor(config: AiraloConfig);
         initialize(): Promise<this>;
@@ -485,6 +530,21 @@ declare module 'airalo-sdk' {
         ): Promise<ExchangeRateResponse | null>;
 
         getSimInstructions(iccid: string, language?: string): Promise<InstructionsResponse | null>;
+
+        // Future orders
+        createFutureOrder(
+            packageId: string,
+            quantity: number,
+            dueDate: string,
+            webhookUrl?: string | null,
+            description?: string | null,
+            brandSettingsName?: string | null,
+            toEmail?: string | null,
+            sharingOption?: ('link' | 'pdf')[] | null,
+            copyAddress?: string[] | null
+        ): Promise<FutureOrderResponse | null>;
+
+        cancelFutureOrder(requestIds: (string | number)[]): Promise<CancelFutureOrderResponse | null>;
     }
 
     export class AiraloStatic {
@@ -534,5 +594,20 @@ declare module 'airalo-sdk' {
         ): Promise<ExchangeRateResponse | null>;
 
         static getSimInstructions(iccid: string, language?: string): Promise<InstructionsResponse | null>;
+
+        // Future orders
+        static createFutureOrder(
+            packageId: string,
+            quantity: number,
+            dueDate: string,
+            webhookUrl?: string | null,
+            description?: string | null,
+            brandSettingsName?: string | null,
+            toEmail?: string | null,
+            sharingOption?: ('link' | 'pdf')[] | null,
+            copyAddress?: string[] | null
+        ): Promise<FutureOrderResponse | null>;
+
+        static cancelFutureOrder(requestIds: (string | number)[]): Promise<CancelFutureOrderResponse | null>;
     }
 }

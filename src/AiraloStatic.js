@@ -10,6 +10,7 @@ const SimService = require("./services/SimService");
 const VoucherService = require("./services/VoucherService");
 const ExchangeRateService = require("./services/ExchangeRateService");
 const InstallationInstructionsService = require("./services/InstallationInstructionsService");
+const FutureOrderService = require("./services/FutureOrderService");
 
 class AiraloStatic {
   static pool = {};
@@ -24,6 +25,7 @@ class AiraloStatic {
   static voucherService;
   static exchangeRateService;
   static installationInstructionsService;
+  static futureOrderService;
 
   static async init(config) {
     try {
@@ -260,6 +262,38 @@ class AiraloStatic {
     });
   }
 
+  static async createFutureOrder(
+    packageId,
+    quantity,
+    dueDate,
+    webhookUrl = null,
+    description = null,
+    brandSettingsName = null,
+    toEmail = null,
+    sharingOption = null,
+    copyAddress = null,
+  ) {
+    this.checkInitialized();
+    return this.futureOrderService.createFutureOrder({
+      package_id: packageId,
+      quantity,
+      due_date: dueDate,
+      webhook_url: webhookUrl,
+      description: description ?? "Future order placed via Airalo Node.js SDK",
+      brand_settings_name: brandSettingsName,
+      to_email: toEmail,
+      sharing_option: sharingOption,
+      copy_address: copyAddress,
+    });
+  }
+
+  static async cancelFutureOrder(requestIds) {
+    this.checkInitialized();
+    return this.futureOrderService.cancelFutureOrder({
+      request_ids: requestIds,
+    });
+  }
+
   static async initResources(config) {
     this.config = this.pool["config"] ?? new Config(config);
     this.httpClient = this.pool["httpClient"] ?? new HttpClient(this.config);
@@ -297,6 +331,14 @@ class AiraloStatic {
     this.installationInstructionsService =
       this.pool["installationInstructionsService"] ??
       new InstallationInstructionsService(this.config, this.httpClient, token);
+    this.futureOrderService =
+      this.pool["futureOrderService"] ??
+      new FutureOrderService(
+        this.config,
+        this.httpClient,
+        this.signature,
+        token,
+      );
   }
 
   static checkInitialized() {

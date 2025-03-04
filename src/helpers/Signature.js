@@ -28,16 +28,20 @@ class Signature {
     if (!payload) return null;
 
     if (typeof payload === "string") {
-      // remove all whitespaces from JSON string
+      // Try to parse the string as JSON
       try {
-        payload = JSON.stringify(JSON.parse(payload));
+        // Parse the JSON string
+        const parsedPayload = JSON.parse(payload);
+
+        // Re-stringify it to normalize format, BUT ALSO ESCAPE FORWARD SLASHES
+        payload = JSON.stringify(parsedPayload).replace(/\//g, "\\/");
       } catch {
+        // If it's not valid JSON, return null
         return null;
       }
-    }
-
-    if (typeof payload !== "string") {
-      payload = JSON.stringify(payload);
+    } else {
+      // If it's an object, convert to JSON string WITH ESCAPED SLASHES
+      payload = JSON.stringify(payload).replace(/\//g, "\\/");
     }
 
     return payload;
