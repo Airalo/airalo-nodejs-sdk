@@ -9,6 +9,7 @@ const SimService = require("./services/SimService");
 const VoucherService = require("./services/VoucherService");
 const ExchangeRateService = require("./services/ExchangeRateService");
 const InstallationInstructionsService = require("./services/InstallationInstructionsService");
+const FutureOrderService = require("./services/FutureOrderService");
 const AiraloException = require("./exceptions/AiraloException");
 
 class Airalo {
@@ -66,6 +67,12 @@ class Airalo {
     this.services.instruction = new InstallationInstructionsService(
       this.config,
       this.httpClient,
+      this.token,
+    );
+    this.services.futureOrders = new FutureOrderService(
+      this.config,
+      this.httpClient,
+      this.signature,
       this.token,
     );
 
@@ -284,6 +291,49 @@ class Airalo {
       iccid,
       language,
     });
+  }
+
+  async createFutureOrder(
+    packageId,
+    quantity,
+    dueDate,
+    webhookUrl = null,
+    description = null,
+    brandSettingsName = null,
+    toEmail = null,
+    sharingOption = null,
+    copyAddress = null,
+  ) {
+    this._isInitialised();
+
+    // Create payload with only defined values
+    const payload = {
+      package_id: packageId,
+      quantity: quantity,
+      due_date: dueDate,
+    };
+
+    if (webhookUrl !== null) payload.webhook_url = webhookUrl;
+    if (description !== null)
+      payload.description =
+        description || "Future order placed via Airalo Node.js SDK";
+    if (brandSettingsName !== null)
+      payload.brand_settings_name = brandSettingsName;
+    if (toEmail !== null) payload.to_email = toEmail;
+    if (sharingOption !== null) payload.sharing_option = sharingOption;
+    if (copyAddress !== null) payload.copy_address = copyAddress;
+
+    return this.services.futureOrders.createFutureOrder(payload);
+  }
+
+  async cancelFutureOrder(requestIds) {
+    this._isInitialised();
+
+    const payload = {
+      request_ids: requestIds,
+    };
+
+    return this.services.futureOrders.cancelFutureOrder(payload);
   }
 
   _isInitialised() {

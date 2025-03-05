@@ -17,6 +17,8 @@ const API_CONSTANTS = {
     VOUCHERS_ESIM_SLUG: "voucher/esim",
     EXCHANGE_RATES_SLUG: "finance/exchange-rates",
     INSTRUCTIONS_SLUG: "instructions",
+    FUTURE_ORDERS: "future-orders",
+    CANCEL_FUTURE_ORDERS: "cancel-future-orders",
   },
 };
 
