@@ -53,6 +53,35 @@ await AiraloStatic.init({
 const allPackages = await AiraloStatic.getAllPackages(true);
 ```
 
+## Cache Configuration
+
+The SDK caches API responses to improve performance. By default, cache files are stored in `.cache` directory relative to your current working directory.
+
+### Custom Cache Location
+
+You can specify a custom cache directory using either of these methods:
+
+**Programmatically:**
+```javascript
+const Cached = require("../helpers/Cached");
+
+// Set custom cache path
+Cached.setCachePath("./my-custom-cache");
+```
+
+**Environment Variable:**
+```bash
+AIRALO_SDK_CACHE_PATH="/path/to/cache"
+```
+
+**IMPORTANT: Cache path priority order**
+
+1. Programmatically set path (via `setCachePath()` method)
+2. Environment variable (`AIRALO_SDK_CACHE_PATH`)
+3. Default path (`.cache` in current working directory)
+
+Both absolute and relative paths are supported. The SDK will automatically create the cache directory if it doesn't exist.
+
 # Methods Interface
 <h2> Packages </h2>
 
