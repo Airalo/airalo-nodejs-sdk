@@ -93,7 +93,7 @@ Both absolute and relative paths are supported. The SDK will automatically creat
 ```javascript
 async getAllPackages(flat = false, limit = null, page = null)
 ```
-Fetching all of Airalo's packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object, example:
+Fetching all of Airalo's packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `flat` as true will return package objects data in a single data object, example:
 ```json
 {
   "data": [
@@ -214,7 +214,7 @@ By default, no limit number of packages will be applied if `limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.
 
 <h3> Get Local Packages </h3>
-Fetching local Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object.<br>
+Fetching local Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `flat` as true will return package objects data in a single data object.<br>
 
 ```javascript
 async getLocalPackages(flat = false, limit = null, page = null)
@@ -223,7 +223,7 @@ By default no limit number of packages will be applied if `limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.<br>
 
 <h3> Get Global Packages </h3>
-Fetching global Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object.<br>
+Fetching global Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `flat` as true will return package objects data in a single data object.<br>
 
 ```javascript
 async getGlobalPackages(flat = false, limit = null, page = null)
@@ -232,7 +232,7 @@ By default, no limit number of packages will be applied if `limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.<br>
 
 <h3> Get Country Packages </h3>
-Fetching country specific Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object.<br>
+Fetching country specific Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `flat` as true will return package objects data in a single data object.<br>
 
 ```javascript
 async getCountryPackages(countryCode, flat = false, limit = null)
@@ -241,7 +241,7 @@ By default, no limit number of packages will be applied if `limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.<br>
 
 <h3> Get SIM Packages </h3>
-Fetching Sim only Airalo packages without top-ups. By default, the response will be the same as the one from packages REST endpoint (more here: https://partners-doc.airalo.com/#d775be27-4c08-45d1-9faa-8ec2c4f97bf5). Passing `flat` as true will return package objects data in a single data object.<br>
+Fetching Sim only Airalo packages without top-ups. By default, the response will be the same as the one from packages REST endpoint (more here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-packages-11883036e0). Passing `flat` as true will return package objects data in a single data object.<br>
 
 ```javascript
 async getSimPackages(countryCode, flat = false, limit = null)
@@ -257,7 +257,7 @@ By default it will paginate all pages (multiple calls) or if `page` is provided 
 async order(packageId, quantity, description = null)
 ```
 Places an order for a given package id (fetched from any of the packages calls) and calls `order` endpoint of the REST API.
-Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/submit-order-11883024e0<br>
 
 ```javascript
 const { Airalo, AiraloStatic } = require('airalo-sdk');
@@ -292,7 +292,7 @@ async orderAsync(packageId, quantity, webhookUrl = null, description = null)
 ```
 
 Places an async order for a given package id (fetched from any of the packages calls) and calls `order-async` endpoint of the REST API.
-Full information can be found here: https://partners-doc.airalo.com/#c8471dfc-83d6-4d36-ac8e-6dce2d55a49e<br>
+Full information can be found here:  https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/submit-order-async-11883025e0<br>
 
 ```javascript
 const asyncOrder = await airalo.orderAsync(
@@ -319,7 +319,6 @@ Places an order for a given package id (fetched from any of the packages calls) 
 Accepts additional array `esimCloud` with mandatory key `to_email` (a valid email address) belonging to an end user and `sharing_option` one of or both: ['link', 'pdf'] with optional list of `copy_address`.<br>
 The end user will receive an email with a link button (and pdf attachment if selected) with redirect to a fully managed eSIM page with installation instructions, usage checks.<br>
 This method is recommended if you do not intend to handle eSIM management for your users in your applications.<br>
-Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
 
 ```javascript
 const order = await airalo.orderWithEmailSimShare(
@@ -401,7 +400,7 @@ const staticAsyncBulkOrders = await AiraloStatic.orderAsyncBulk(
 `async simUsage(string iccid)`<br>
 
 Places an iccid with user iccid  and calls `simUsage` endpoint of the REST API. <br>
-Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-usage-data-text-voice-11883030e0<br>
 
 ```javascript
 const { Airalo } = require('airalo-sdk');
@@ -441,7 +440,7 @@ Example response can be found in the API documentation (link above).<br>
 `async simUsageBulk(iccids)`<br>
 
 Places an array of iccids and calls `simUsage` endpoint of the REST API in parallel for each of the iccids. <br>
-Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-usage-data-text-voice-11883030e0<br>
 
 ```javascript
 const { Airalo } = require('airalo-sdk');
@@ -485,7 +484,7 @@ Example response can be found in the API documentation (link above). <br>
 `async getSimTopups(iccid)`<br>
 
 Fetches all available topups for the provided `iccid` belonging to an ordered eSIM. <br>
-Full response example can be found here: https://partners-doc.airalo.com/#13535dd3-c337-4122-8e97-2fdb93263e86<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-top-up-package-list-11883031e0<br>
 
 ```javascript
 const { Airalo } = require('airalo-sdk');
@@ -526,7 +525,7 @@ Example response can be found in the API documentation (link above). <br>
 `async getSimPackageHistory(iccid)`<br>
 
 Fetches package history for the provided `iccid` belonging to an ordered eSIM. <br>
-Full response example can be found here: https://partners-doc.airalo.com/#5e9bdbcb-dce5-42f7-8e41-d7c1d2dba7a5<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-esim-package-history-11883032e0<br>
 
 ```javascript
 const { Airalo } = require('airalo-sdk');
@@ -568,7 +567,7 @@ Example response can be found in the API documentation (link above). <br>
 `async topup(packageId, iccid, description=null)`<br>
 
 Places a topup for a given package id and iccid of an eSIM and calls `topups` endpoint of the REST API.<br>
-Full response example can be found here: https://partners-doc.airalo.com/#e411d932-2993-463f-a548-754c47ac7c00<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/submit-top-up-order-11883026e0<br>
 
 ```javascript
 
@@ -604,7 +603,6 @@ const allPackages = await AiraloStatic.topup(packageId, iccid);
 <h2> Vouchers </h2>
 
 `async voucher(usageLimit, amount, quantity, isPaid = false, voucherCode = null)` method calls the `voucher` endpoint of the REST API.
-Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9
 
 ```javascript
 const { Airalo } = require('airalo-sdk');
@@ -658,7 +656,7 @@ Example response:
 <h2>Esim Vouchers</h2>
 
 `async esimVouchers(vouchers)` method calls the `voucher/esim` endpoint of the REST API.
-Full response example can be found here: https://partners-doc.airalo.com/#5a48bb8d-70d1-4030-ad92-4a82eb979281
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/esim-voucher-11883065e0<br>
 
 ```javascript
 const { Airalo } = require('airalo-sdk');
@@ -796,7 +794,7 @@ Example Response:
 
 `async getSimInstructions(iccid, language = "en")`<br>
 Places an `iccid` with user iccid & `language` with language like en,de. by default its en and calls `getSimInstructions` endpoint of the REST API.
-Full response example can be found here: https://partners-doc.airalo.com/#768fbbc7-b649-4fb5-9755-be579333a2d9<br>
+Full response example can be found here: https://www.apidog.com/apidoc/shared/e776ed42-a7e7-4c52-9ea2-b65d4758fea2/get-installation-instructions-11883029e0<br>
 
 ```javascript
 const { Airalo } = require('airalo-sdk');
