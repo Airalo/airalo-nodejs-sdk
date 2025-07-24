@@ -11,6 +11,7 @@ const VoucherService = require("./services/VoucherService");
 const ExchangeRateService = require("./services/ExchangeRateService");
 const InstallationInstructionsService = require("./services/InstallationInstructionsService");
 const FutureOrderService = require("./services/FutureOrderService");
+const CompatibleDevicesService = require("./services/CompatibleDevicesService");
 
 class AiraloStatic {
   static pool = {};
@@ -294,6 +295,11 @@ class AiraloStatic {
     });
   }
 
+  static async getCompatibleDevices() {
+    this.checkInitialized();
+    return this.compatibleDevicesService.getCompatibleDevices();
+  }
+
   static async initResources(config) {
     this.config = this.pool["config"] ?? new Config(config);
     this.httpClient = this.pool["httpClient"] ?? new HttpClient(this.config);
@@ -339,6 +345,9 @@ class AiraloStatic {
         this.signature,
         token,
       );
+    this.compatibleDevicesService =
+      this.pool["compatibleDevicesService"] ??
+      new CompatibleDevicesService(this.config, this.httpClient, token);
   }
 
   static checkInitialized() {

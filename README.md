@@ -1125,7 +1125,7 @@ const cancelFutureOrders = await airalo.cancelFutureOrder(
 //
 // Static usage
 //
-const { Airalo } = require('airalo-sdk');
+const { AiraloStatic } = require('airalo-sdk');
 
 await AiraloStatic.init({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
@@ -1149,6 +1149,64 @@ Example response for the call:<br>
   }
 }
 ```
+<br>
+<h2> Get Compatible Devices </h2>
+
+`async getCompatibleDevices()`<br>
+
+Calls the compatible eSIM devices endpoint of the REST API.
+```javascript
+
+const { Airalo } = require('airalo-sdk');
+
+const airalo = new Airalo({
+    client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
+    client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
+    env: 'sandbox',                                 // optional, defaults to `production`
+});
+
+const devices = await airalo.getCompatibleDevices();
+
+//
+// Static usage
+//
+const { AiraloStatic } = require('airalo-sdk');
+
+await AiraloStatic.init({
+    client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
+    client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
+    env: 'sandbox',                                 // optional, defaults to `production`
+});
+
+const devices = await AiraloStatic.getCompatibleDevices();
+```
+<br><br>
+Example response for the call:<br>
+```json
+{
+    "data": [
+        {
+            "os": "android",
+            "brand": "ABCTECH",
+            "name": "X20"
+        },
+        {
+            "os": "android",
+            "brand": "Asus",
+            "name": "ZenFone Max Pro M1 (ZB602KL) (WW) / Max Pro M1 (ZB601KL) (IN)"
+        },
+        {
+            "os": "android",
+            "brand": "Asus",
+            "name": "ZenFone Max Pro M1 (ZB602KL) (WW) / Max Pro M1 (ZB601KL) (IN)"
+        },
+        ...
+        ...
+        ...
+    ]
+}
+```
+<br>
 
 # Technical notes
 - Encrypted auth tokens are automatically cached in filesystem for 24h

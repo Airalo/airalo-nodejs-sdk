@@ -11,6 +11,7 @@ const ExchangeRateService = require("./services/ExchangeRateService");
 const InstallationInstructionsService = require("./services/InstallationInstructionsService");
 const FutureOrderService = require("./services/FutureOrderService");
 const AiraloException = require("./exceptions/AiraloException");
+const CompatibleDevicesService = require("./services/CompatibleDevicesService");
 
 class Airalo {
   constructor(config) {
@@ -73,6 +74,11 @@ class Airalo {
       this.config,
       this.httpClient,
       this.signature,
+      this.token,
+    );
+    this.services.compatibleDevices = new CompatibleDevicesService(
+      this.config,
+      this.httpClient,
       this.token,
     );
 
@@ -334,6 +340,12 @@ class Airalo {
     };
 
     return this.services.futureOrders.cancelFutureOrder(payload);
+  }
+
+  async getCompatibleDevices() {
+    this._isInitialised();
+
+    return this.services.compatibleDevices.getCompatibleDevices();
   }
 
   _isInitialised() {
