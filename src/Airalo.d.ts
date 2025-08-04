@@ -431,6 +431,11 @@ declare module 'airalo-sdk' {
         }): Promise<InstructionsResponse | null>;
     }
 
+    export class CompatibleDevicesService {
+        constructor(config: AiraloConfig, httpClient: HttpClient, accessToken: string);
+        getCompatibleDevices(): Promise<CompatibleDevicesResponse | null>;
+    }
+
     export interface FutureOrderPayload {
         package_id: string;
         quantity: number;
@@ -465,6 +470,17 @@ declare module 'airalo-sdk' {
         data: {
             cancelled_requests: string[] | number[];
         };
+        meta: {
+            message: string;
+        };
+    }
+
+    export interface CompatibleDevicesResponse {
+        data: {
+            os: string;
+            brand: string;
+            name: string;
+        }[];
         meta: {
             message: string;
         };

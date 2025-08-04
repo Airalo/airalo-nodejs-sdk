@@ -19,6 +19,7 @@ const API_CONSTANTS = {
     INSTRUCTIONS_SLUG: "instructions",
     FUTURE_ORDERS: "future-orders",
     CANCEL_FUTURE_ORDERS: "cancel-future-orders",
+    COMPATIBLE_DEVICES_SLUG: "compatible-devices-lite",
   },
 };
 
