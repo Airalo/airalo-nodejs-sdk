@@ -48,7 +48,6 @@ describe("SimService", () => {
     airalo = new Airalo({
       client_id: "test-id",
       client_secret: "test-secret",
-
     });
 
     await airalo.initialize();

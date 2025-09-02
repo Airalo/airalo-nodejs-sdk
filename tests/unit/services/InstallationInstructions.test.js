@@ -49,7 +49,6 @@ describe("InstallationInstructionsService", () => {
     airalo = new Airalo({
       client_id: "test-id",
       client_secret: "test-secret",
-  
     });
 
     await airalo.initialize();
