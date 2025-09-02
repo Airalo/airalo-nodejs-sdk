@@ -53,7 +53,6 @@ describe("TopupService", () => {
     airalo = new Airalo({
       client_id: "test-id",
       client_secret: "test-secret",
-      env: "sandbox",
     });
     await airalo.initialize();
     airalo.services.topup = topupService;
@@ -62,7 +61,6 @@ describe("TopupService", () => {
     await AiraloStatic.init({
       client_id: "test-id",
       client_secret: "test-secret",
-      env: "sandbox",
     });
     AiraloStatic.topupService = topupService;
   });

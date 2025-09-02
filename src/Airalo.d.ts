@@ -2,7 +2,6 @@ declare module 'airalo-sdk' {
     export interface AiraloConfig {
         client_id: string;
         client_secret: string;
-        env?: 'sandbox' | 'production';
         http_headers?: Record<string, string>;
     }
 

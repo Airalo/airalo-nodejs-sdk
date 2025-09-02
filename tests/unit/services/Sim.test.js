@@ -48,7 +48,7 @@ describe("SimService", () => {
     airalo = new Airalo({
       client_id: "test-id",
       client_secret: "test-secret",
-      env: "sandbox",
+
     });
 
     await airalo.initialize();
@@ -57,7 +57,6 @@ describe("SimService", () => {
     await AiraloStatic.init({
       client_id: "test-id",
       client_secret: "test-secret",
-      env: "sandbox",
     });
     AiraloStatic.simService = simService;
   });

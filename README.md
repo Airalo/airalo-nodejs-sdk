@@ -30,7 +30,6 @@ const { Airalo } = require('airalo-sdk');
 const airalo = new Airalo({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
 });
 
 // Must initialize before using
@@ -47,7 +46,6 @@ const { AiraloStatic } = require('airalo-sdk');
 await AiraloStatic.init({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
 });
 
 const allPackages = await AiraloStatic.getAllPackages(true);
@@ -410,7 +408,6 @@ async main() {
     const airalo = new Airalo({
         client_id: '<YOUR_TOKEN_ID',
         client_secret: 'YOUR_SECRET',
-        env: 'sandbox'  // or 'production'
     });
 
     await airalo.initialize();
@@ -426,7 +423,7 @@ async main() {
     const airalo = AiraloStatic.init({
         client_id: '<YOUR_TOKEN_ID',
         client_secret: 'YOUR_SECRET',
-        env: 'sandbox'  // or 'production'
+        
     });
 
     const usage = await AiraloStatic.getSimUsage('894000000000048447');
@@ -449,8 +446,7 @@ const { AiraloStatic } = require('airalo-sdk');
 async main() {
     const airalo = new Airalo({
         client_id: '<YOUR_TOKEN_ID',
-        client_secret: 'YOUR_SECRET',
-        env: 'sandbox'  // or 'production'
+        client_secret: 'YOUR_SECRET', 
     });
 
     await airalo.initialize();
@@ -466,7 +462,6 @@ async main() {
     const airalo = AiraloStatic.init({
         client_id: '<YOUR_TOKEN_ID',
         client_secret: 'YOUR_SECRET',
-        env: 'sandbox'  // or 'production'
     });
 
     const usages = await AiraloStatic.simUsageBulk(['894000000000048447', '894000000000048448']);
@@ -494,7 +489,7 @@ async main() {
     const airalo = new Airalo({
         client_id: '<YOUR_TOKEN_ID',
         client_secret: 'YOUR_SECRET',
-        env: 'sandbox'  // or 'production'
+        
     });
 
     await airalo.initialize();
@@ -510,7 +505,7 @@ async main() {
     const airalo = AiraloStatic.init({
         client_id: '<YOUR_TOKEN_ID',
         client_secret: 'YOUR_SECRET',
-        env: 'sandbox'  // or 'production'
+        
     });
 
     const topups = await AiraloStatic.getSimTopups('894000000000048447');
@@ -535,7 +530,7 @@ async main() {
     const airalo = new Airalo({
         client_id: '<YOUR_TOKEN_ID',
         client_secret: 'YOUR_SECRET',
-        env: 'sandbox'  // or 'production'
+        
     });
 
     await airalo.initialize();
@@ -551,7 +546,7 @@ async main() {
     const airalo = AiraloStatic.init({
         client_id: '<YOUR_TOKEN_ID',
         client_secret: 'YOUR_SECRET',
-        env: 'sandbox'  // or 'production'
+        
     });
 
     const history = await AiraloStatic.getSimPackageHistory('894000000000048447');
@@ -576,7 +571,6 @@ const { Airalo } = require('airalo-sdk');
 const airalo = new Airalo({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
 });
 
 // Must initialize before using
@@ -594,7 +588,6 @@ const { AiraloStatic } = require('airalo-sdk');
 await AiraloStatic.init({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
 });
 
 const allPackages = await AiraloStatic.topup(packageId, iccid);
@@ -610,7 +603,7 @@ const { Airalo } = require('airalo-sdk');
 const airalo = new Airalo({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 // Must initialize before using
@@ -664,7 +657,7 @@ const { Airalo } = require('airalo-sdk');
 const airalo = new Airalo({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 // Must initialize before using
@@ -740,7 +733,7 @@ const { Airalo } = require('airalo-sdk');
 const airalo = new Airalo({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 // Must initialize before using
@@ -755,7 +748,7 @@ const { Airalo } = require('airalo-sdk');
 await AiraloStatic.init({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 const rates = await AiraloStatic.getExchangeRates('2025-01-30', null, null, 'AUD,GBP,EUR');
@@ -802,7 +795,7 @@ const { Airalo } = require('airalo-sdk');
 const airalo = new Airalo({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 // Must initialize before using
@@ -817,7 +810,7 @@ const { Airalo } = require('airalo-sdk');
 await AiraloStatic.init({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 const instructions = await AiraloStatic.getSimInstructions('893000000000002115');
@@ -1044,7 +1037,7 @@ const { Airalo } = require('airalo-sdk');
 const airalo = new Airalo({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 // Must initialize before using
@@ -1069,7 +1062,7 @@ const { Airalo } = require('airalo-sdk');
 await AiraloStatic.init({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 const futureOrder = await AiraloStatic.createFutureOrder(
@@ -1111,7 +1104,7 @@ const { Airalo } = require('airalo-sdk');
 const airalo = new Airalo({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 // Must initialize before using
@@ -1130,7 +1123,7 @@ const { AiraloStatic } = require('airalo-sdk');
 await AiraloStatic.init({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 const futureOrder = await AiraloStatic.cancelFutureOrder(
@@ -1162,7 +1155,7 @@ const { Airalo } = require('airalo-sdk');
 const airalo = new Airalo({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 const devices = await airalo.getCompatibleDevices();
@@ -1175,7 +1168,7 @@ const { AiraloStatic } = require('airalo-sdk');
 await AiraloStatic.init({
     client_id: '<YOUR_API_CLIENT_ID>',              // mandatory
     client_secret: '<YOUR_API_CLIENT_SECRET>',      // mandatory
-    env: 'sandbox',                                 // optional, defaults to `production`
+    
 });
 
 const devices = await AiraloStatic.getCompatibleDevices();
