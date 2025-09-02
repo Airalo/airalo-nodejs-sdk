@@ -5,8 +5,6 @@ const AiraloException = require("../exceptions/AiraloException");
 class Config {
   static MANDATORY_CONFIG_KEYS = ["client_id", "client_secret"];
 
-  static ENVIRONMENTS = ["sandbox", "production"];
-
   static DEFAULT_HEADERS = [
     `airalo-nodejs-sdk: ${SDK_CONSTANTS.VERSION}`,
     "Content-Type: application/json",
@@ -38,9 +36,7 @@ class Config {
   }
 
   getUrl() {
-    return this.getEnvironment() === "sandbox"
-      ? API_CONSTANTS.BASE_URL.sandbox
-      : API_CONSTANTS.BASE_URL.production;
+    return API_CONSTANTS.BASE_URL.production;
   }
 
   getHttpHeaders() {
@@ -81,15 +77,7 @@ class Config {
       }
     }
 
-    if (!this.data.env) {
-      this.data.env = "production";
-    }
-
-    if (!Config.ENVIRONMENTS.includes(this.data.env)) {
-      throw new AiraloException(
-        `Invalid environment provided: '${this.data.env}', allowed: ${Config.ENVIRONMENTS.join(", ")}`,
-      );
-    }
+    this.data.env = "production";
 
     if (this.data.http_headers !== undefined) {
       if (!Array.isArray(this.data.http_headers)) {

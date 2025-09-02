@@ -44,7 +44,6 @@ describe("VoucherService", () => {
     airalo = new Airalo({
       client_id: "test-id",
       client_secret: "test-secret",
-      env: "sandbox",
     });
 
     await airalo.initialize();
@@ -53,7 +52,6 @@ describe("VoucherService", () => {
     await AiraloStatic.init({
       client_id: "test-id",
       client_secret: "test-secret",
-      env: "sandbox",
     });
     AiraloStatic.voucherService = voucherService;
   });
@@ -260,7 +258,6 @@ describe("VoucherService", () => {
       const uninitializedAiralo = new Airalo({
         client_id: "test-id",
         client_secret: "test-secret",
-        env: "sandbox",
       });
 
       await expect(uninitializedAiralo.voucher(5, 100, 1)).rejects.toThrow(

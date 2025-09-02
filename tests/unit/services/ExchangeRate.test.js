@@ -47,7 +47,6 @@ describe("ExchangeRateService", () => {
     airalo = new Airalo({
       client_id: "test-id",
       client_secret: "test-secret",
-      env: "sandbox",
     });
 
     await airalo.initialize();
@@ -56,7 +55,6 @@ describe("ExchangeRateService", () => {
     await AiraloStatic.init({
       client_id: "test-id",
       client_secret: "test-secret",
-      env: "sandbox",
     });
     AiraloStatic.exchangeRateService = exchangeRateService;
   });
@@ -332,7 +330,6 @@ describe("ExchangeRateService", () => {
       const uninitializedAiralo = new Airalo({
         client_id: "test-id",
         client_secret: "test-secret",
-        env: "sandbox",
       });
 
       await expect(uninitializedAiralo.getExchangeRates()).rejects.toThrow(
