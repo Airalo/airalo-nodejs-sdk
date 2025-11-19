@@ -104,7 +104,7 @@ class PackagesService {
 
   flatten(data) {
     const flattened = { data: [] };
-    flattened.pricing = data?.pricing ?? [];
+    flattened.pricing = data?.pricing ?? {};
 
     for (const each of data.data) {
       for (const operator of each.operators) {
@@ -118,7 +118,7 @@ class PackagesService {
             slug: each.slug,
             type: pkg.type,
             price: pkg.price,
-            net_price:pkg?.net_price || null,
+            net_price:pkg?.net_price ?? null,
             amount: pkg.amount,
             day: pkg.day,
             is_unlimited: pkg.is_unlimited,
