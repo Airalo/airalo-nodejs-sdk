@@ -91,9 +91,15 @@ Both absolute and relative paths are supported. The SDK will automatically creat
 ```javascript
 async getAllPackages(flat = false, limit = null, page = null)
 ```
-Fetching all of Airalo's packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `flat` as true will return package objects data in a single data object, example:
+Fetching all of Airalo's packages.<br>
+NOTE that depending on from the pricing model (field named 'model' in the pricing object) there can be additional fields displayed or hidden. Check the documentation link below for more details.<br>
+By default, the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `flat` as true will return package objects data in a single data object, example:
 ```json
 {
+  "pricing": {
+    "model": "net_pricing",
+    "discount_percentage": 0
+  },
   "data": [
     {
       "package_id": "meraki-mobile-7days-1gb",
