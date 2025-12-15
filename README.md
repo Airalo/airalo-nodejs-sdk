@@ -235,6 +235,15 @@ async getGlobalPackages(flat = false, limit = null, page = null)
 By default, no limit number of packages will be applied if `limit` is empty<br>
 By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.<br>
 
+<h3> Get Universal Packages </h3>
+Fetching universal Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `flat` as true will return package objects data in a single data object.<br>
+
+```javascript
+async getUniversalPackages(flat = false, limit = null, page = null)
+```
+By default, no limit number of packages will be applied if `limit` is empty<br>
+By default it will paginate all pages (multiple calls) or if `page` is provided it will be the starting pagination index.<br>
+
 <h3> Get Country Packages </h3>
 Fetching country specific Airalo packages. By default, the response will be the same as the one from packages REST endpoint (more here: https://developers.partners.airalo.com/get-packages-11883036e0). Passing `flat` as true will return package objects data in a single data object.<br>
 
@@ -482,9 +491,15 @@ Example response can be found in the API documentation (link above). <br>
 <br><br>
 <h2> Sim Topups </h2>
 
-`async getSimTopups(iccid)`<br>
+`async getSimTopups(iccid, iso2CountryCode=null)`<br>
 
-Fetches all available topups for the provided `iccid` belonging to an ordered eSIM. <br>
+Fetches all available topups for the provided `iccid` belonging to an ordered eSIM. <br><br>
+
+Parameters:<br>
+`iccid` - the `iccid` from the eSim order<br>
+`iso2CountryCode` - optional parameter to filter topups for a specific iso2 country code. Only applicable if the `iccid` is from a universal eSim<br>
+
+
 Full response example can be found here: https://developers.partners.airalo.com/get-top-up-package-list-11883031e0<br>
 
 ```javascript

@@ -132,6 +132,12 @@ class SimService {
     }
 
     const iccid = String(params.iccid);
+
+    if (slug === API_CONSTANTS.ENDPOINTS.SIMS_TOPUPS && params["filter[country]"]) {
+      const query = new URLSearchParams({ "filter[country]": params["filter[country]"] }).toString();
+      slug += `?${query}`;
+    }
+
     return `${this.baseUrl}${API_CONSTANTS.ENDPOINTS.SIMS}/${iccid}/${slug || API_CONSTANTS.ENDPOINTS.SIMS_USAGE}`;
   }
 

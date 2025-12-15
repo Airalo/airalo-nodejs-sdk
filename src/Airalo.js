@@ -131,6 +131,17 @@ class Airalo {
     });
   }
 
+  async getUniversalPackages(flat = false, limit = null, page = null) {
+    this._isInitialised();
+
+    return this.services.packages.getPackages({
+      flat,
+      limit,
+      page,
+      type: "universal",
+    });
+  }
+
   async getCountryPackages(countryCode, flat = false, limit = null) {
     this._isInitialised();
 
@@ -241,10 +252,13 @@ class Airalo {
     return this.services.sims.simUsageBulk(iccids);
   }
 
-  async getSimTopups(iccid) {
+  async getSimTopups(iccid, iso2CountryCode=null) {
     this._isInitialised();
 
-    return this.services.sims.simTopups({ iccid });
+    return this.services.sims.simTopups({
+        iccid,
+        'filter[country]': iso2CountryCode
+    });
   }
 
   async getSimPackageHistory(iccid) {

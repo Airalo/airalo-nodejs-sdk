@@ -208,6 +208,20 @@ describe("PackagesService", () => {
     );
   });
 
+  test("should handle universal package filtering", async () => {
+    const response = { data: [], meta: { last_page: 1 } };
+    mockHttpClient.get.mockResolvedValue(response);
+
+    // Using Airalo instance
+    await airalo.getUniversalPackages();
+    // Using AiraloStatic
+    await AiraloStatic.getUniversalPackages();
+
+    expect(mockHttpClient.get).toHaveBeenCalledWith(
+      expect.stringMatching(/.*filter%5Btype%5D=universal.*/),
+    );
+  });
+
   test("should handle country filter", async () => {
     // Using Airalo instance
     await airalo.getCountryPackages("US");
