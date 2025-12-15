@@ -252,12 +252,12 @@ class Airalo {
     return this.services.sims.simUsageBulk(iccids);
   }
 
-  async getSimTopups(iccid, iso2CountryCode=null) {
+  async getSimTopups(iccid, iso2CountryCode = null) {
     this._isInitialised();
 
     return this.services.sims.simTopups({
-        iccid,
-        'filter[country]': iso2CountryCode
+      iccid,
+      "filter[country]": iso2CountryCode,
     });
   }
 

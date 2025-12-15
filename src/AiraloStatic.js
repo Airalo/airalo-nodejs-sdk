@@ -203,11 +203,11 @@ class AiraloStatic {
     return this.simService.simUsageBulk(iccids);
   }
 
-  static async getSimTopups(iccid, iso2CountryCode=null) {
+  static async getSimTopups(iccid, iso2CountryCode = null) {
     this.checkInitialized();
     return this.simService.simTopups({
-        iccid,
-        'filter[country]': iso2CountryCode
+      iccid,
+      "filter[country]": iso2CountryCode,
     });
   }
 
