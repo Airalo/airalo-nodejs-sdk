@@ -123,6 +123,8 @@ class PackagesService {
             day: pkg.day,
             is_unlimited: pkg.is_unlimited,
             title: pkg.title,
+            is_fair_usage_policy: pkg.is_fair_usage_policy,
+            fair_usage_policy: pkg.fair_usage_policy,
             data: pkg.data,
             short_info: pkg.short_info,
             voice: pkg.voice,
