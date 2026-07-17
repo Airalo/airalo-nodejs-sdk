@@ -155,7 +155,7 @@ class SimService {
     return (
       typeof val === "string" &&
       /^\d+$/.test(val) &&
-      val.length >= 18 &&
+      val.length >= 16 &&
       val.length <= 22
     );
   }

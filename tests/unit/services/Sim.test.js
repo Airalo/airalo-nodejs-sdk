@@ -190,6 +190,27 @@ describe("SimService", () => {
     }
   });
 
+  test("should accept a 16-digit ICCID (e.g. sandbox/test ICCIDs)", async () => {
+    const shortIccid = "8936000000001387"; // 16 digits
+    const mockResponse = {
+      data: {
+        iccid: shortIccid,
+        package_id: "pkg1",
+      },
+    };
+
+    mockHttpClient.get.mockResolvedValue(mockResponse);
+
+    const [resultInstance, resultStatic] = await Promise.all([
+      airalo.getSimTopups(shortIccid),
+      AiraloStatic.getSimTopups(shortIccid),
+    ]);
+
+    expect(resultInstance.data.iccid).toBe(shortIccid);
+    expect(resultStatic.data.iccid).toBe(shortIccid);
+    expect(mockHttpClient.get).toHaveBeenCalledTimes(2);
+  });
+
   test("should validate bulk sim usage input", async () => {
     const invalidInputs = [
       null,
