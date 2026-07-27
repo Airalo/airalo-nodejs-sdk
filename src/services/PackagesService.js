@@ -84,6 +84,10 @@ class PackagesService {
       queryParams["filter[type]"] = "global";
     }
 
+    if (params.type === "universal") {
+      queryParams["filter[type]"] = "universal";
+    }
+
     if (params.country) {
       queryParams["filter[country]"] = params.country;
     }
