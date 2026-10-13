@@ -1,0 +1,30 @@
+# Airalo Node.js SDK
+
+> Official Node.js SDK for the Airalo Partner API. Use it to list eSIM packages, place orders, top up eSIMs, check usage and manage vouchers. It handles authentication, request signing, caching and rate limiting for you. Requires Node.js 18 or newer.
+
+Install:
+
+```bash
+npm install airalo-sdk
+```
+
+Primary entry point: `require("airalo-sdk")`, which exports `{ Airalo, AiraloStatic, Cached }`.
+
+```javascript
+const { Airalo } = require("airalo-sdk");
+
+const airalo = new Airalo({ client_id: "<CLIENT_ID>", client_secret: "<CLIENT_SECRET>" });
+await airalo.initialize();
+const packages = await airalo.getAllPackages(true);
+```
+
+## Docs
+
+- [README](https://github.com/Airalo/airalo-nodejs-sdk/blob/main/README.md): installation, initialization, caching and the full methods interface
+- [AGENTS.md](https://github.com/Airalo/airalo-nodejs-sdk/blob/main/AGENTS.md): repository layout, conventions, quality gates and testing for contributors and AI agents
+- [Airalo Partner API reference](https://developers.partners.airalo.com/): the underlying REST API
+
+## Optional
+
+- [npm package](https://www.npmjs.com/package/airalo-sdk)
+- [TypeScript declarations](https://github.com/Airalo/airalo-nodejs-sdk/blob/main/src/Airalo.d.ts)

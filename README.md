@@ -20,6 +20,9 @@ OR
 
 Install the Airalo SDK using yarn: `yarn add airalo-sdk`
 
+# Using AI agents
+If you work on this SDK with an AI coding agent, point it at [`AGENTS.md`](AGENTS.md). That file covers the repository layout, code conventions, lint and test commands, and how to add an endpoint. Claude Code loads it automatically through `CLAUDE.md`. For a short machine-readable summary of the SDK, see [`llms.txt`](llms.txt).
+
 # Initialization
 The SDK provides two ways to interact with the API:
 
