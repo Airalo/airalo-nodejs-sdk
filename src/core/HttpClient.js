@@ -88,6 +88,14 @@ class HttpClient {
 
       req.on("error", reject);
 
+      req.on("timeout", () => {
+        req.destroy(
+          new AiraloException(
+            `Request timed out after ${requestOptions.timeout}ms: ${method} ${parsedUrl.hostname}${parsedUrl.pathname}`,
+          ),
+        );
+      });
+
       if (body) {
         req.write(body);
       }
