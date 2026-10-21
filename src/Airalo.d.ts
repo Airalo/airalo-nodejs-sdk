@@ -499,12 +499,13 @@ declare module 'airalo-sdk' {
         getSimPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getLocalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getGlobalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
+        getUniversalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
         getCountryPackages(countryCode: string, flat?: boolean, limit?: number | null): Promise<PackageResponse | null>;
 
         // New SIM-related methods
         getSimUsage(iccid: string): Promise<SimUsageResponse | null>;
         getSimUsageBulk(iccids: string[]): Promise<SimUsageBulkResponse | null>;
-        getSimTopups(iccid: string): Promise<SimTopupResponse | null>;
+        getSimTopups(iccid: string, iso2CountryCode?: string | null): Promise<SimTopupResponse | null>;
         getSimPackageHistory(iccid: string): Promise<SimPackageHistoryResponse | null>;
 
         // Topup method
@@ -565,10 +566,17 @@ declare module 'airalo-sdk' {
     export class AiraloStatic {
         static init(config: AiraloConfig): Promise<void>;
 
+        static getAllPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
+        static getSimPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
+        static getLocalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
+        static getGlobalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
+        static getUniversalPackages(flat?: boolean, limit?: number | null, page?: number | null): Promise<PackageResponse | null>;
+        static getCountryPackages(countryCode: string, flat?: boolean, limit?: number | null): Promise<PackageResponse | null>;
+
         // New static SIM-related methods
         static getSimUsage(iccid: string): Promise<SimUsageResponse | null>;
         static getSimUsageBulk(iccids: string[]): Promise<SimUsageBulkResponse | null>;
-        static getSimTopups(iccid: string): Promise<SimTopupResponse | null>;
+        static getSimTopups(iccid: string, iso2CountryCode?: string | null): Promise<SimTopupResponse | null>;
         static getSimPackageHistory(iccid: string): Promise<SimPackageHistoryResponse | null>;
 
         // Topup static method

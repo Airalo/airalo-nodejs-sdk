@@ -93,6 +93,16 @@ class AiraloStatic {
     });
   }
 
+  static async getUniversalPackages(flat = false, limit = null, page = null) {
+    this.checkInitialized();
+    return this.packagesService.getPackages({
+      flat,
+      limit,
+      page,
+      type: "universal",
+    });
+  }
+
   static async getCountryPackages(countryCode, flat = false, limit = null) {
     this.checkInitialized();
     return this.packagesService.getPackages({
@@ -193,9 +203,12 @@ class AiraloStatic {
     return this.simService.simUsageBulk(iccids);
   }
 
-  static async getSimTopups(iccid) {
+  static async getSimTopups(iccid, iso2CountryCode = null) {
     this.checkInitialized();
-    return this.simService.simTopups({ iccid });
+    return this.simService.simTopups({
+      iccid,
+      "filter[country]": iso2CountryCode,
+    });
   }
 
   static async getSimPackageHistory(iccid) {
